@@ -153,71 +153,81 @@ body {
     display: block;
     object-fit: cover;
 }
-/* --- SECCIÓN VISIÓN --- */
+/* --- SECCIÓN VISIÓN REPARADA --- */
 .vision-section {
-    background: linear-gradient(135deg, #064e3b 0%, #ffffff 50%, #ffffff 100%);
-    padding: 60px 40px;
-    font-family: Arial, sans-serif; /* Ajustar a la fuente de tu web */
-    text-align: center;
+    width: 100%;
+    /* Fondo degradado suave alineado con tus colores corporativos */
+    background: linear-gradient(180deg, #436d57 0%, #f4f6f8 15%, #ffffff 100%);
+    padding: 80px 40px;
+    box-sizing: border-box;
+    clear: both; /* Evita heredar colapsos de elementos flotantes previos */
 }
 
 .vision-title {
-    color: #0f2a4a;
-    font-size: 2.2rem;
-    font-weight: bold;
-    margin-bottom: 40px;
+    color: #002e6e; /* Azul Certus */
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 50px;
+    text-align: center;
 }
 
 .vision-container {
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: 30px;
+    gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
-    flex-wrap: wrap; /* Permite que sea responsivo en celulares */
+    width: 100%;
 }
 
 /* Tarjeta de texto izquierda */
 .vision-card {
-    background: linear-gradient(135deg, #a7f3d0 0%, #1e293b 100%);
+    /* Degradado idéntico al de la imagen de referencia */
+    background: linear-gradient(135deg, #bbf7d0 0%, #1e293b 70%);
     color: #ffffff;
     flex: 1;
     min-width: 320px;
-    padding: 40px;
+    padding: 50px;
     border-radius: 24px;
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+/* Contenedor estricto para el icono para que no se deforme */
 .card-icon-container {
     background-color: #ffffff;
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    flex-shrink: 0; /* Impide que el contenedor se deforme */
 }
 
+/* Forzar tamaño explícito del icono SVG */
 .card-icon {
-    width: 28px;
-    height: 28px;
+    width: 26px !important;
+    height: 26px !important;
+    display: block;
 }
 
 .vision-card h3 {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
     color: #ffffff;
 }
 
 .vision-card p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #e2e8f0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #f1f5f9;
 }
 
 /* Contenedor de imagen derecha */
@@ -225,22 +235,30 @@ body {
     flex: 1;
     min-width: 320px;
     display: flex;
+    border-radius: 24px;
+    overflow: hidden; /* Corta las esquinas de la imagen interior */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .vision-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Mantiene la proporción de la foto */
-    border-radius: 0px; /* Cambiar si prefieres bordes redondeados en la foto */
+    max-height: 450px; /* Evita que crezca infinitamente hacia abajo */
+    object-fit: cover;
+    display: block;
 }
 
-/* Ajuste responsivo para pantallas pequeñas */
-@media (max-width: 768px) {
+/* Ajuste responsivo para celulares y tablets */
+@media (max-width: 900px) {
     .vision-container {
         flex-direction: column;
     }
     
     .vision-image img {
-        height: 300px;
+        height: 350px;
+    }
+    
+    .vision-section {
+        padding: 50px 20px;
     }
 }
