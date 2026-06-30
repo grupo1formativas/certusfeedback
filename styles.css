@@ -197,25 +197,8 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Contenedor estricto para el icono para que no se deforme */
-.card-icon-container {
-    background-color: #ffffff;
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 25px;
-    flex-shrink: 0; /* Impide que el contenedor se deforme */
-}
 
-/* Forzar tamaño explícito del icono SVG */
-.card-icon {
-    width: 26px !important;
-    height: 26px !important;
-    display: block;
-}
+
 
 .vision-card h3 {
     font-size: 28px;
