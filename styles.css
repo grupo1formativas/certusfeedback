@@ -392,11 +392,16 @@ body {
         flex: none;
     }
 }
-/* --- SECCIÓN EVALUACIONES --- */
+/* ==========================================================================
+   SECCIÓN EVALUACIONES (EVALUACIÓN DOCENTE POR SEMESTRE)
+   ========================================================================== */
+
 .evaluacion-section {
     background: linear-gradient(135deg, #eef4f9 0%, #d9e7f5 100%);
-    padding: 60px 10%;
-    font-family: Arial, sans-serif; /* Ajusta según la fuente de tu proyecto */
+    padding: 60px 8%;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    clear: both; /* Evita que se monte con secciones anteriores si hay floats */
+    display: block;
 }
 
 .evaluacion-header-container {
@@ -407,27 +412,29 @@ body {
 }
 
 .evaluacion-title-block {
-    max-width: 70%;
+    max-width: 75%;
+    text-align: left;
 }
 
 .evaluacion-main-title {
-    color: #112b54;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-transform: uppercase;
+    color: #0b2240;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.5px;
 }
 
 .evaluacion-subtitle {
     color: #4a5568;
-    font-size: 1.1rem;
-    line-height: 1.5;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
-/* Logotipo de la C en el lado derecho */
-.circle-logo {
-    width: 90px;
-    height: 90px;
+/* Círculo con la letra C en la derecha */
+.evaluacion-logo-right .circle-logo {
+    width: 85px;
+    height: 85px;
     background-color: #0b2240;
     color: #ffffff;
     border-radius: 50%;
@@ -436,47 +443,48 @@ body {
     justify-content: center;
     font-size: 3.5rem;
     font-weight: bold;
-    border: 8px solid #ffffff;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    border: 6px solid #ffffff;
+    box-shadow: 0px 8px 20px rgba(11, 34, 64, 0.15);
 }
 
-/* Rejilla de tarjetas (3 columnas en pantallas grandes) */
+/* Configuración de la cuadrícula para las 6 tarjetas */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas idénticas */
+    gap: 30px;
+    width: 100%;
 }
 
-/* Estilos base de las tarjetas */
+/* Estilo común para todas las tarjetas */
 .eval-card {
     border-radius: 16px;
-    padding: 30px 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
-}
-
-.eval-card:hover {
-    transform: translateY(-5px);
+    padding: 35px 28px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
 }
 
 .card-title-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .eval-card h3 {
-    color: #112b54;
-    font-size: 1.4rem;
-    font-weight: bold;
+    color: #0b2240;
+    font-size: 1.35rem;
+    font-weight: 700;
     margin: 0;
     line-height: 1.2;
     max-width: 80%;
 }
 
 .card-icon {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    line-height: 1;
 }
 
 .eval-card p {
@@ -486,23 +494,36 @@ body {
     margin: 0;
 }
 
-/* Variaciones de color para las filas */
+/* Colores de fondo específicos del diseño */
 .bg-white {
     background-color: #ffffff;
 }
 
 .bg-blue {
-    background-color: #dbe7f6; /* Tono azul claro para las 3 de abajo */
+    background-color: #dbe7f6; /* Azul claro para la fila inferior */
 }
 
-/* Adaptabilidad para móviles */
+/* --- ADAPTABILIDAD PARA PANTALLAS MEDIANAS Y MÓVILES --- */
+@media (max-width: 1024px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+    }
+}
+
 @media (max-width: 768px) {
     .evaluacion-header-container {
         flex-direction: column;
         text-align: center;
+        gap: 20px;
     }
+    
     .evaluacion-title-block {
         max-width: 100%;
-        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr; /* 1 sola columna en celulares */
+        gap: 20px;
     }
 }
