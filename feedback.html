@@ -249,12 +249,15 @@
                 const tarjeta = `
                     <div class="teacher-card">
                         <div class="profile-section">
-                            <div class="avatar-container">
-                                <img src="${docente.foto}" alt="${docente.nombre}">
-                            </div>
-                            <h2>${docente.nombre}</h2>
-                            <p>${docente.facultad}</p>
-                        </div>
+                            // Reemplaza esta sección exacta dentro de la constante 'tarjeta'
+<div class="profile-section">
+    <div class="avatar-container">
+        <img src="${docente.foto}" alt="" onerror="this.style.display='none';">
+    </div>
+    <h2>${docente.nombre}</h2>
+    <p>${docente.facultad}</p>
+</div>
+
                         <div class="feedbacks-section">
                             ${htmlFeedbacks}
                         </div>
