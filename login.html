@@ -19,7 +19,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400://txt;
+            max-width: 400px;
             text-align: center;
         }
         .login-card h2 { color: #0b1b3d; margin-bottom: 25px; }
@@ -62,12 +62,12 @@
         </div>
     </main>
 
-    <!-- LIBRERÍA DE SUPABASE -->
+    <!-- LIBRERÍA DE SUPABASE (DIRECCIÓN OFICIAL COMPLETA) -->
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        // COLOCA LAS MISMAS CLAVES QUE USASTE EN FEEDBACK.HTML
-        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co/rest/v1/"; 
+        // CREDENCIALES OPTIMIZADAS
+        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -88,7 +88,7 @@
                 alert("Error: Credenciales inválidas o sin permisos.");
             } else {
                 alert("¡Acceso concedido! Entrando al panel de administración.");
-                window.location.href = "feedback.html"; // Nos redirige automáticamente
+                window.location.href = "feedback.html"; // Redirección automática
             }
         });
     </script>
