@@ -436,3 +436,101 @@ body {
     align-items: center;
     margin-bottom: 12px;
 }
+/* 1. CONTENEDOR PRINCIPAL DE LA SECCIÓN */
+.evaluacion-section {
+    padding: 60px 40px;
+    background-color: #ffffff; /* Fondo blanco para toda la sección */
+    font-family: Arial, sans-serif; /* O la fuente que uses en tu proyecto */
+}
+
+/* 2. CABECERA (Título, subtítulo y bloque del logo derecho) */
+.evaluacion-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.evaluacion-title-block {
+    max-width: 65%;
+}
+
+.evaluacion-main-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0b1b3d; /* Azul oscuro del encabezado */
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.evaluacion-subtitle {
+    font-size: 1rem;
+    color: #555555;
+    line-height: 1.5;
+}
+
+/* Ocultamos el logo circular temporalmente como solicitaste */
+.evaluacion-logo-right {
+    display: none; 
+}
+
+/* 3. MALLA DE TARJETAS (Estructura en 3 columnas) */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Fuerza 3 columnas simétricas */
+    gap: 25px; /* Espacio entre tarjetas */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 4. ESTILO BASE PARA TODAS LAS TARJETAS */
+.eval-card {
+    padding: 30px;
+    border-radius: 12px; /* Bordes redondeados suaves */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 200px; /* Altura mínima uniforme */
+}
+
+/* Títulos internos de las tarjetas con sus íconos inline */
+.card-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.eval-card h3 {
+    font-size: 1.3rem;
+    color: #0b1b3d;
+    margin: 0;
+    font-weight: bold;
+}
+
+.card-icon {
+    font-size: 1.3rem;
+}
+
+.eval-card p {
+    font-size: 0.95rem;
+    color: #444444;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 5. VARIACIONES DE COLOR DE FONDO (Según tu HTML) */
+/* Tarjetas con fondo blanco humo / gris ultra claro */
+.bg-white {
+    background-color: #f4f7fc; 
+    border: 1px solid #e2e8f0; /* Borde muy sutil para dar definición */
+}
+
+/* Tarjetas con fondo azul pastel claro */
+.bg-blue {
+    background-color: #e3effa; 
+    border: 1px solid #cfe2f5;
+}
