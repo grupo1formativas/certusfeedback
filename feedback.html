@@ -4,77 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CERTUS - Feedback de Docentes</title>
-    <!-- Mantenemos tus estilos globales y añadimos los nuevos -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Estilo rápido para el panel de inserción superior -->
+    <style>
+        .admin-panel-box {
+            display: none;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 25px;
+            background-color: #f4f7fc;
+            border: 2px dashed #0b1b3d;
+            border-radius: 12px;
+        }
+        .admin-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .admin-form textarea { grid-column: span 2; height: 80px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .admin-form input, .admin-form select { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .admin-form button { grid-column: span 2; padding: 12px; background-color: #0b1b3d; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .admin-form button:hover { background-color: #16326c; }
+        .btn-delete-comment { background: #dc3545; color: white; border: none; padding: 4px 8px; margin-left: 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+        .feedback-item-inline { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+    </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN (IDÉNTICA PARA MANTENER LA CONSISTENCIA) -->
+    <!-- BARRA DE NAVEGACIÓN -->
     <header class="navbar">
         <div class="logo-container">
             <img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
         </div>
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
-            <a href="#">Evaluaciones</a>
+            <a href="evaluaciones.html">Evaluaciones</a>
             <a href="#">Cuestionarios</a>
             <a href="feedback.html" class="active">Feedback de Docentes</a>
         </nav>
         <div class="nav-auth">
-            <a href="#" class="btn-login">Iniciar Sesión</a>
+            <a href="#" id="auth-btn" class="btn-login">Iniciar Sesión</a>
         </div>
     </header>
 
-    <!-- SECCIÓN DE FEEDBACKS -->
+    <!-- FORMULARIO EXCLUSIVO PARA ADMINISTRADORES -->
+    <div id="admin-panel" class="admin-panel-box">
+        <h2 style="color: #0b1b3d; margin-top: 0; margin-bottom: 15px;">Gestión de Feedbacks (Modo Administrador)</h2>
+        <form id="form-add-feedback" class="admin-form">
+            <input type="text" id="input-docente" placeholder="Ej: Prof. Carlos Mendoza" required>
+            <input type="text" id="input-facultad" placeholder="Ej: Facultad de Negocios" required>
+            <select id="input-foto" required>
+                <option value="profe 1.png">Silueta Masculina (profe 1.png)</option>
+                <option value="profe 2.png">Silueta Femenina (profe 2.png)</option>
+                <option value="profe 3.png">Silueta Masculina Alterna (profe 3.png)</option>
+            </select>
+            <span style="align-self: center; color: #555; font-size: 0.9rem;">Selecciona el avatar correspondiente</span>
+            <textarea id="input-comentario" placeholder="Escribe la retroalimentación o comentario del estudiante..." required></textarea>
+            <button type="submit">Agregar Comentario al Docente</button>
+        </form>
+    </div>
+
+    <!-- SECCIÓN DE FEEDBACKS DINÁMICOS -->
     <main class="feedback-page-container">
         <h1 class="page-title">Feedback de Docentes</h1>
 
-        <div class="teachers-list">
-            
-            <!-- DOCENTE 1 -->
-            <div class="teacher-row">
-                <div class="teacher-profile">
-                    <img src="profe 1.png" alt="Foto de Docente 1" class="teacher-img">
-                    <h3>Prof. Carlos Mendoza</h3>
-                    <p class="teacher-dept">Facultad de Negocios</p>
-                </div>
-                <div class="feedbacks-container">
-                    <div class="feedback-card"><p>"Excelente metodología de enseñanza y gran dominio de los temas prácticos."</p></div>
-                    <div class="feedback-card"><p>"Siempre está dispuesto a resolver dudas fuera del horario de clases."</p></div>
-                    <div class="feedback-card"><p>"Sus evaluaciones son justas y alineadas con lo avanzado en el ciclo."</p></div>
-                </div>
-            </div>
-
-            <!-- DOCENTE 2 -->
-            <div class="teacher-row">
-                <div class="teacher-profile">
-                    <img src="profe 2.png" alt="Foto de Docente 2" class="teacher-img">
-                    <h3>Prof. Ana Rivas</h3>
-                    <p class="teacher-dept">Facultad de Tecnología</p>
-                </div>
-                <div class="feedbacks-container">
-                    <div class="feedback-card"><p>"Promueve la participación constante y hace las clases muy dinámicas."</p></div>
-                    <div class="feedback-card"><p>"Puntual y muy organizada con el material que comparte en el portal."</p></div>
-                    <div class="feedback-card"><p>"Tiene mucha paciencia al explicar conceptos complejos de programación."</p></div>
-                </div>
-            </div>
-
-            <!-- DOCENTE 3 -->
-            <div class="teacher-row">
-                <div class="teacher-profile">
-                    <img src="profe 3.png" alt="Foto de Docente 3" class="teacher-img">
-                    <h3>Prof. Luis Torres</h3>
-                    <p class="teacher-dept">Facultad de Diseño</p>
-                </div>
-                <div class="feedbacks-container">
-                    <div class="feedback-card"><p>"Brinda retroalimentación muy constructiva en cada entrega de proyecto."</p></div>
-                    <div class="feedback-card"><p>"Usa herramientas visuales modernas que facilitan el aprendizaje."</p></div>
-                    <div class="feedback-card"><p>"Motiva a los estudiantes a ir más allá de la currícula estándar."</p></div>
-                </div>
-            </div>
-
-        </div>
+        <!-- Contenedor vacío: El script se encargará de rellenarlo -->
+        <div id="teachers-list-container" class="teachers-list"></div>
     </main>
 
+    <!-- LIBRERÍA OFICIAL DE SUPABASE -->
+    <script src="https://jsdelivr.net"></script>
+    
+    <script>
+        // REEMPLAZA CON LOS DATOS REALES DE TU PROYECTO (Supabase -> Settings -> API)
+               // REEMPLAZA LAS LÍNEAS 80 A 82 CON ESTO:
+        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co/rest/v1/"; // Pon aquí tu URL real de Supabase
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";        // Pon aquí tu llave Anon real de Supabase
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            renderizarContenido();
+        });
+
+        async function renderizarContenido() {
+            // 1. Validar el estado de la autenticación
+            const { data: { user } } = await _supabase.auth.getUser();
+            const adminPanel = document.getElementById('admin-panel');
+            const authBtn = document.getElementById('auth-btn');
+
+            if (user) {
+                adminPanel.style.display = 'block';
+                authBtn.textContent = 'Cerrar Sesión';
+                authBtn.href = '#';
+                authBtn.onclick = async () => {
+                    await _supabase.auth.signOut();
+                    location.reload();
+                };
+            } else {
+                adminPanel.style.display = 'none';
+                authBtn.textContent = 'Iniciar Sesión';
+                // Apuntar a tu archivo login.html si lo creas independiente
+                authBtn.href = '#'; 
+            }
+
+            // 2. Consultar registros de la base de datos
+            const { data: feedbacks, error } = await _supabase
+                .from('feedbacks')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error("Error cargando feedbacks:", error);
+                return;
+            }
+
+            // 3. Agrupar comentarios por nombre de docente utilizando un diccionario
+            const docentesAgrupados = {};
+            feedbacks.forEach(item => {
+                if (!docentesAgrupados[item.docente]) {
+                    docentesAgrupados[item.docente] = {
+                        facultad: item.facultad,
+                        foto: item.foto_url,
+                        comentarios: []
+                    };
+                }
+                docentesAgrupados[item.docente].comentarios.push({
+                    id: item.id,
+                    texto: item.comentario
+                });
+            });
+
+            // 4. Inyectar la estructura replicando exactamente tu diseño CSS original
+            const mainContainer = document.getElementById('teachers-list-container');
+            mainContainer.innerHTML = '';
+
+            for (const nombreDocente in docentesAgrupados) {
+                const info = docentesAgrupados[nombreDocente];
+
+                const row = document.createElement('div');
+                row.className = 'teacher-row';
+
+                // Bloque izquierdo del perfil
+                const profileDiv = document.createElement('div');
+                profileDiv.className = 'teacher-profile';
+                profileDiv.innerHTML = `
+                    <img src="${info.foto}" alt="Foto de ${nombreDocente}" class="teacher-img">
+                    <h3>${nombreDocente}</h3>
+                    <p class="teacher-dept">${info.facultad}</p>
+                `;
+
+                // Bloque derecho que agrupa las tarjetas de comentarios
+                const cardsContainer = document.createElement('div');
+                cardsContainer.className = 'feedbacks-container';
+
+                info.comentarios.forEach(com => {
+                    const card = document.createElement('div');
+                    card.className = 'feedback-card';
+                    
+                    if (user) {
+                        // Si es administrador inyectamos el botón de eliminar alineado a la derecha
+                        card.innerHTML = `
+                            <div class="feedback-item-inline">
+                                <p>${com.texto}</p>
+                                <button class="btn-delete-comment" onclick="eliminarComentario(${com.id})">❌</button>
+                            </div>
+                        `;
+                    } else {
+                        card.innerHTML = `<p>${com.texto}</p>`;
+                    }
+                    cardsContainer.appendChild(card);
+                });
+
+                row.appendChild(profileDiv);
+                row.appendChild(cardsContainer);
+                mainContainer.appendChild(row);
+            }
+        }
+
+        // Evento para añadir un comentario (Solo Administradores)
+        document.getElementById('form-add-feedback').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nuevoRegistro = {
+                docente: document.getElementById('input-docente').value,
+                facultad: document.getElementById('input-facultad').value,
+                foto_url: document.getElementById('input-foto').value,
+                comentario: document.getElementById('input-comentario').value
+            };
+
+            const { error } = await _supabase.from('feedbacks').insert([nuevoRegistro]);
+
+            if (error) {
+                alert('No dispones de privilegios para escribir cambios directos.');
+            } else {
+                alert('Comentario agregado exitosamente al perfil del docente.');
+                document.getElementById('input-comentario').value = '';
+                renderizarContenido();
+            }
+        });
+
+        // Función para eliminar un comentario individual (Solo Administradores)
+        async function eliminarComentario(id) {
+            if (confirm('¿Deseas remover permanentemente esta entrada de la plataforma?')) {
+                const { error } = await _supabase.from('feedbacks').delete().eq('id', id);
+                if (error) {
+                    alert('Error de autenticación. No se pudo procesar la remoción.');
+                } else {
+                    renderizarContenido();
+                }
+            }
+        }
+    </script>
 </body>
 </html>
+

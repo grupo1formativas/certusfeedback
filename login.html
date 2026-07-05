@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERTUS - Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            font-family: Arial, sans-serif;
+        }
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400://txt;
+            text-align: center;
+        }
+        .login-card h2 { color: #0b1b3d; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: bold; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn-submit-login { width: 100%; padding: 12px; background: #0b1b3d; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        .btn-submit-login:hover { background: #16326c; }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="evaluaciones.html">Evaluaciones</a>
+            <a href="#">Cuestionarios</a>
+            <a href="feedback.html">Feedback de Docentes</a>
+        </nav>
+    </header>
+
+    <main class="login-page-container">
+        <div class="login-card">
+            <h2>Acceso Institucional</h2>
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="txtCorreo">Correo Electrónico</label>
+                    <input type="email" id="txtCorreo" placeholder="ejemplo@certus.edu.pe" required>
+                </div>
+                <div class="form-group">
+                    <label for="txtPassword">Contraseña</label>
+                    <input type="password" id="txtPassword" placeholder="******" required>
+                </div>
+                <button type="submit" class="btn-submit-login">Ingresar al Sistema</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- LIBRERÍA DE SUPABASE -->
+    <script src="https://jsdelivr.net"></script>
+    <script>
+        // COLOCA LAS MISMAS CLAVES QUE USASTE EN FEEDBACK.HTML
+        const SUPABASE_URL = "https://supabase.co"; 
+        const SUPABASE_ANON_KEY = "aquivapegadatuclavedeapisupabaseanon";
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const correo = document.getElementById('txtCorreo').value;
+            const password = document.getElementById('txtPassword').value;
+
+            // Intentar iniciar sesión en Supabase
+            const { data, error } = await _supabase.auth.signInWithPassword({
+                email: correo,
+                password: password
+            });
+
+            if (error) {
+                alert("Error: Credenciales inválidas o sin permisos.");
+            } else {
+                alert("¡Acceso concedido! Entrando al panel de administración.");
+                window.location.href = "feedback.html"; // Nos redirige automáticamente
+            }
+        });
+    </script>
+</body>
+</html>
