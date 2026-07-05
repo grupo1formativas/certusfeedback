@@ -171,7 +171,7 @@
 </head>
 <body>
 
-        <!-- BARRA DE NAVEGACIÓN CORREGIDA Y CENTRADA -->
+    <!-- BARRA DE NAVEGACIÓN CORREGIDA Y CENTRADA -->
     <header class="navbar" style="padding: 0; display: block; background-color: #ffffff; width: 100%;">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-sizing: border-box;">
             <div class="logo-container">
@@ -200,21 +200,15 @@
         </div>
     </main>
 
-    <!-- ARCHIVO LOCAL DE SUPABASE AUTOGESTIONADO -->
-    <!-- Reemplaza tu <script src="supabase.js"></script> por este: -->
-<!-- Busca esta línea en tu HTML: -->
-<!-- <script src="supabase.js"></script> -->
-
-<!-- Y reemplázala por esta CDN oficial: -->
-<script src="https://jsdelivr.net"></script>
-
-
+    <!-- CDN OFICIAL DE SUPABASE (CORREGIDA) -->
+    <script src="https://jsdelivr.net"></script>
 
     <script>
-        // CREDENCIALES OPTIMIZADAS
-        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co/rest/v1/"; 
+        // CREDENCIALES OPTIMIZADAS (URL CORREGIDA SIN /REST/V1/)
+        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
 
+        // Inicializar cliente de Supabase
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Arreglo global temporal para almacenar lo que viene de la BD
@@ -229,7 +223,7 @@
 
             if (error) {
                 console.error("Error cargando datos de Supabase:", error);
-                alert("No se pudieron cargar los datos.");
+                alert("No se pudieron cargar los datos de la base de datos.");
                 return;
             }
 
@@ -313,7 +307,8 @@
             const { data, error } = await _supabase
                 .from('docentes')
                 .update({ feedbacks: nuevosFeedbacks })
-                .eq('id', docenteId);
+                .eq('id', docenteId)
+                .select(); // Se añade select() para verificar respuesta en algunas versiones
 
             if (error) {
                 alert("Error al actualizar: " + error.message);
@@ -329,3 +324,4 @@
         document.addEventListener('DOMContentLoaded', cargarFeedbacksDesdeSupabase);
     </script>
 </body>
+</html>
