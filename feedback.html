@@ -189,7 +189,6 @@
         </div>
     </header>
 
-
     <!-- CUERPO DE FEEDBACKS -->
     <main class="main-content">
         <div class="feedback-container">
@@ -201,64 +200,61 @@
         </div>
     </main>
 
-    <script>
-        // ZONA DE EDICIÓN
-        const infoDocentes = [
-            {
-                nombre: "Prof. Carlos Mendoza",
-                facultad: "Facultad de Negocios",
-                foto: "profe 1.png", 
-                feedbacks: [
-                    "Excelente metodología de enseñanza y gran dominio de los temas prácticos.",
-                    "Siempre está dispuesto a resolver dudas fuera del horario de clases.",
-                    "Sus evaluaciones son justas y alineadas con lo avanzado en el ciclo."
-                ]
-            },
-            {
-                nombre: "Prof. Ana Rivas",
-                facultad: "Facultad de Tecnología",
-                foto: "profe 2.png", 
-                feedbacks: [
-                    "Promueve la participación constante y hace las clases muy dinámicas.",
-                    "Puntual y muy organizada con el material que comparte en el portal.",
-                    "Tiene mucha paciencia al explicar conceptos complejos de programación."
-                ]
-            },
-            {
-                nombre: "Prof. Luis Torres",
-                facultad: "Facultad de Diseño",
-                foto: "profe 3.png", 
-                feedbacks: [
-                    "Brinda retroalimentación muy constructiva en cada entrega de proyecto.",
-                    "Usa herramientas visuales modernas que facilitan el aprendizaje.",
-                    "Motiva a los estudiantes a ir más allá de la currícula estándar."
-                ]
-            }
-        ];
+    <!-- ARCHIVO LOCAL DE SUPABASE AUTOGESTIONADO -->
+    <script src="supabase.js"></script>
 
-        function cargarFeedbacks() {
+    <script>
+        // CREDENCIALES OPTIMIZADAS
+        const SUPABASE_URL = "https://supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Arreglo global temporal para almacenar lo que viene de la BD
+        let listaDocentesGlobal = [];
+
+        // 1. FUNCIÓN PARA CARGAR LOS DATOS DESDE SUPABASE
+        async function cargarFeedbacksDesdeSupabase() {
+            const { data: docentes, error } = await _supabase
+                .from('docentes')
+                .select('*')
+                .order('id', { ascending: true });
+
+            if (error) {
+                console.error("Error cargando datos de Supabase:", error);
+                alert("No se pudieron cargar los datos.");
+                return;
+            }
+
+            listaDocentesGlobal = docentes; // Guardamos en la variable global
             const contenedor = document.getElementById('docentes-list');
             contenedor.innerHTML = '';
 
-            infoDocentes.forEach(docente => {
+            docentes.forEach((docente, index) => {
                 let htmlFeedbacks = '';
-                docente.feedbacks.forEach(comentario => {
-                    htmlFeedbacks += `<div class="feedback-bubble"><span>${comentario}</span></div>`;
-                });
+                
+                if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
+                    docente.feedbacks.forEach((comentario, cIndex) => {
+                        htmlFeedbacks += `
+                            <div class="feedback-bubble">
+                                <span id="text-${index}-${cIndex}">${comentario}</span>
+                            </div>
+                        `;
+                    });
+                }
 
                 const tarjeta = `
-                    <div class="teacher-card">
+                    <div class="teacher-card" id="card-${index}">
                         <div class="profile-section">
-                            // Reemplaza esta sección exacta dentro de la constante 'tarjeta'
-<div class="profile-section">
-    <div class="avatar-container">
-        <img src="${docente.foto}" alt="" onerror="this.style.display='none';">
-    </div>
-    <h2>${docente.nombre}</h2>
-    <p>${docente.facultad}</p>
-</div>
-
-                        <div class="feedbacks-section">
+                            <div class="avatar-container">
+                                <img src="${docente.foto}" alt="" onerror="this.style.display='none';">
+                            </div>
+                            <h2>${docente.nombre}</h2>
+                            <p>${docente.facultad}</p>
+                            <!-- BOTÓN DE ACCIÓN EN LA TARJETA -->
+                            <button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>
+                        </div>
+                        <div class="feedbacks-section" id="feedbacks-container-${index}">
                             ${htmlFeedbacks}
                         </div>
                     </div>
@@ -267,7 +263,62 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', cargarFeedbacks);
+        // 2. ACTIVA LOS INPUTS EN LA TARJETA SELECCIONADA
+        function habilitarEdicion(index, docenteId) {
+            const docente = listaDocentesGlobal[index];
+            const contenedorFeedbacks = document.getElementById(`feedbacks-container-${index}`);
+            
+            let htmlInputs = '';
+            docente.feedbacks.forEach((comentario, cIndex) => {
+                htmlInputs += `
+                    <div class="feedback-bubble" style="padding: 10px;">
+                        <input type="text" value="${comentario}" class="input-feedback-${index}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                `;
+            });
+
+            contenedorFeedbacks.innerHTML = htmlInputs;
+
+            // Cambiar comportamiento del botón a "Guardar"
+            const btnAction = document.getElementById(`btn-action-${index}`);
+            btnAction.innerText = "Guardar";
+            btnAction.style.background = "#00bfa5";
+            btnAction.style.color = "#fff";
+            btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
+        }
+
+        // 3. ENVÍA LOS CAMBIOS EDITADOS A TU TABLA DE SUPABASE
+        async function guardarCambiosSupabase(index, docenteId) {
+            const btnAction = document.getElementById(`btn-action-${index}`);
+            btnAction.innerText = "Guardando...";
+            btnAction.disabled = true;
+
+            // Capturar todos los nuevos valores de los inputs correspondientes
+            const inputs = document.querySelectorAll(`.input-feedback-${index}`);
+            const nuevosFeedbacks = [];
+            inputs.forEach(input => {
+                if (input.value.trim() !== "") {
+                    nuevosFeedbacks.push(input.value.trim());
+                }
+            });
+
+            // Petición UPDATE hacia tu servicio de Supabase
+            const { data, error } = await _supabase
+                .from('docentes')
+                .update({ feedbacks: nuevosFeedbacks })
+                .eq('id', docenteId);
+
+            if (error) {
+                alert("Error al actualizar: " + error.message);
+                btnAction.innerText = "Guardar";
+                btnAction.disabled = false;
+            } else {
+                alert("¡Comentarios actualizados correctamente en Supabase!");
+                await cargarFeedbacksDesdeSupabase(); // Recarga la vista actualizada
+            }
+        }
+
+        // Ejecución automática al abrir la pantalla
+        document.addEventListener('DOMContentLoaded', cargarFeedbacksDesdeSupabase);
     </script>
 </body>
-</html>
