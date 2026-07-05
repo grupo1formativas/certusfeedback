@@ -57,39 +57,59 @@
                     <label for="txtPassword">Contraseña</label>
                     <input type="password" id="txtPassword" placeholder="******" required>
                 </div>
-                <button type="submit" class="btn-submit-login">Ingresar al Sistema</button>
+                <button type="submit" class="btn-submit-login" id="btnIngresar">Ingresar al Sistema</button>
             </form>
         </div>
     </main>
 
-    <!-- LIBRERÍA DE SUPABASE (DIRECCIÓN OFICIAL COMPLETA) -->
+    <!-- LIBRERÍA DE SUPABASE CORREGIDA -->
     <script src="https://jsdelivr.net"></script>
 
-
     <script>
-        // CREDENCIALES OPTIMIZADAS
+        // CREDENCIALES
         const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let _supabase;
+        
+        try {
+            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (err) {
+            console.error("Error al inicializar Supabase:", err);
+            alert("Error crítico: No se pudo conectar con la base de datos.");
+        }
 
         document.getElementById('form-login').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const btn = document.getElementById('btnIngresar');
             const correo = document.getElementById('txtCorreo').value;
             const password = document.getElementById('txtPassword').value;
 
-            // Intentar iniciar sesión en Supabase
-            const { data, error } = await _supabase.auth.signInWithPassword({
-                email: correo,
-                password: password
-            });
+            // Feedback visual de carga
+            btn.innerText = "Cargando...";
+            btn.disabled = true;
 
-            if (error) {
-                alert("Error: Credenciales inválidas o sin permisos.");
-            } else {
-                alert("¡Acceso concedido! Entrando al panel de administración.");
-                window.location.href = "feedback.html"; // Redirección automática
+            try {
+                // Intentar iniciar sesión en Supabase
+                const { data, error } = await _supabase.auth.signInWithPassword({
+                    email: correo,
+                    password: password
+                });
+
+                if (error) {
+                    alert("Error: " + error.message);
+                } else {
+                    alert("¡Acceso concedido! Entrando al panel de administración.");
+                    window.location.href = "feedback.html"; 
+                }
+            } catch (err) {
+                console.error("Error en la petición:", err);
+                alert("Ocurrió un error inesperado al intentar iniciar sesión.");
+            } finally {
+                // Restaurar botón
+                btn.innerText = "Ingresar al Sistema";
+                btn.disabled = false;
             }
         });
     </script>
