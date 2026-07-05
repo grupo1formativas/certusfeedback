@@ -495,3 +495,116 @@ body {
     background-color: #e3effa; 
     border: 1px solid #cfe2f5;
 }
+/* ==========================================
+   ESTILOS SECCIÓN DESEMPEÑO DOCENTE
+   ========================================== */
+
+.desempeño-section {
+    padding: 60px 40px;
+    background-color: #ffffff; /* O el color de fondo claro de tu preferencia */
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Contenedor flexible dividido en 2 columnas */
+.desempeño-container {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+
+/* COLUNA IZQUIERDA */
+.desempeño-left {
+    flex: 1; /* Ocupa el 50% del espacio */
+}
+
+.desempeño-main-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #0b1b3d; /* Azul oscuro institucional */
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.desempeño-intro {
+    font-size: 1rem;
+    color: #444444;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.desempeño-image-wrapper {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.desempeño-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* COLUMNA DERECHA (TARJETAS DE PREGUNTAS) */
+.desempeño-right {
+    flex: 1; /* Ocupa el otro 50% */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Separación vertical entre tarjetas */
+}
+
+.faq-card {
+    background-color: #f4f7fc; /* Fondo blanco humo sutil */
+    border: 1.5px solid #0b1b3d; /* Borde oscuro delgado como la muestra */
+    border-radius: 12px; /* Esquinas redondeadas */
+    padding: 25px;
+}
+
+.faq-card h3 {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #0b1b3d;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.faq-card p {
+    font-size: 0.95rem;
+    color: #444444;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* FRASE DESTACADA DEL FINAL */
+.desempeño-footer-quote {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 20px;
+}
+
+.desempeño-footer-quote p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0b1b3d;
+    margin: 0;
+}
+
+/* AJUSTE PARA PANTALLAS PEQUEÑAS (MÓVILES) */
+@media (max-width: 768px) {
+    .desempeño-container {
+        flex-direction: column; /* Se apila una columna sobre otra en celulares */
+        gap: 30px;
+    }
+    
+    .desempeño-main-title {
+        font-size: 2rem;
+    }
+    
+    .desempeño-footer-quote p {
+        font-size: 1.4rem;
+    }
+}
