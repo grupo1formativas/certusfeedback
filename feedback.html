@@ -4,64 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CERTUS - Feedback de Docentes</title>
+    <!-- VINCULACIÓN CON TU HOJA DE ESTILOS EXISTENTE -->
+    <link rel="stylesheet" href="styles.css">
+    
     <style>
+        /* ESTILOS EXCLUSIVOS PARA LAS TARJETAS DE FEEDBACK */
         :root {
-            --primary-color: #0b1b3d;
-            --accent-color: #00bfa5;
-            --bg-body: #4c7c64; /* Color verde de fondo */
-            --bg-card: #ffffff;
-            --text-dark: #333333;
-            --text-muted: #777777;
+            --accent-green: #00bfa5;
+            --bg-body-green: #4c7c64; /* Color verde de fondo */
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg-body);
+            background-color: var(--bg-body-green) !important; /* Fuerza el fondo verde */
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        /* ==================== ESTILOS DE LA BARRA SUPERIOR ==================== */
-        .navbar {
-            width: 100%;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo-container .logo {
-            height: 45px; /* Ajusta según el tamaño de tu logo */
-            display: block;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: bold;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        .nav-menu a:hover {
-            color: var(--accent-color);
-        }
-
-        /* ==================== CONTENEDOR PRINCIPAL DE FEEDBACKS ==================== */
+        /* Contenedor principal debajo de la navbar */
         .main-content {
             padding: 40px 20px;
             width: 100%;
@@ -70,8 +30,8 @@
             box-sizing: border-box;
         }
 
-        .container {
-            background-color: var(--bg-card);
+        .feedback-container {
+            background-color: #ffffff;
             width: 100%;
             max-width: 900px;
             border-radius: 16px;
@@ -80,8 +40,8 @@
             box-sizing: border-box;
         }
 
-        h1 {
-            color: var(--primary-color);
+        .feedback-container h1 {
+            color: #0b1b3d;
             text-align: center;
             margin-top: 0;
             margin-bottom: 8px;
@@ -91,7 +51,7 @@
         .underline {
             width: 60px;
             height: 4px;
-            background-color: var(--accent-color);
+            background-color: var(--accent-green);
             margin: 0 auto 40px auto;
             border-radius: 2px;
         }
@@ -137,6 +97,7 @@
             object-fit: cover;
         }
 
+        /* Círculo verde exterior de la foto */
         .avatar-container::before {
             content: '';
             position: absolute;
@@ -144,20 +105,20 @@
             left: -4px;
             right: -4px;
             bottom: -4px;
-            border: 3px solid var(--accent-color);
+            border: 3px solid var(--accent-green);
             border-radius: 50%;
             pointer-events: none;
         }
 
         .profile-section h2 {
             font-size: 1.1rem;
-            color: var(--primary-color);
+            color: #0b1b3d;
             margin: 0 0 5px 0;
         }
 
         .profile-section p {
             font-size: 0.8rem;
-            color: var(--text-muted);
+            color: #777777;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin: 0;
@@ -200,16 +161,6 @@
 
         /* Adaptación móvil */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px;
-            }
-            .nav-menu {
-                gap: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
             .teacher-card {
                 flex-direction: column;
                 gap: 20px;
@@ -220,7 +171,7 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN RESTAURADA -->
+    <!-- BARRA DE NAVEGACIÓN EXACTA AL INDEX -->
     <header class="navbar">
         <div class="logo-container">
             <img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
@@ -229,27 +180,31 @@
             <a href="index.html">Inicio</a>
             <a href="evaluaciones.html">Evaluaciones</a>
             <a href="#">Cuestionarios</a>
-            <a href="feedback.html" style="color: var(--accent-color);">Feedback de Docentes</a>
+            <a href="feedback.html" class="active">Feedback de Docentes</a>
         </nav>
+        <div class="nav-auth">
+            <a href="login.html" id="auth-btn" class="btn-login">Iniciar Sesión</a>
+        </div>
     </header>
 
-    <!-- CONTENIDO DE LOS COMENTARIOS -->
+    <!-- CUERPO DE FEEDBACKS -->
     <main class="main-content">
-        <div class="container">
+        <div class="feedback-container">
             <h1>Feedback de Docentes</h1>
             <div class="underline"></div>
 
+            <!-- Listado dinámico -->
             <div id="docentes-list"></div>
         </div>
     </main>
 
     <script>
-        // ZONA DE EDICIÓN: Modifica fácilmente los contenidos aquí abajo
+        // ZONA DE EDICIÓN
         const infoDocentes = [
             {
                 nombre: "Prof. Carlos Mendoza",
                 facultad: "Facultad de Negocios",
-                foto: "profe 1.png", 
+                foto: "https://unsplash.com", 
                 feedbacks: [
                     "Excelente metodología de enseñanza y gran dominio de los temas prácticos.",
                     "Siempre está dispuesto a resolver dudas fuera del horario de clases.",
@@ -259,7 +214,7 @@
             {
                 nombre: "Prof. Ana Rivas",
                 facultad: "Facultad de Tecnología",
-                foto: "profe 2.png", 
+                foto: "https://unsplash.com", 
                 feedbacks: [
                     "Promueve la participación constante y hace las clases muy dinámicas.",
                     "Puntual y muy organizada con el material que comparte en el portal.",
@@ -269,7 +224,7 @@
             {
                 nombre: "Prof. Luis Torres",
                 facultad: "Facultad de Diseño",
-                foto: "profe 3.png", 
+                foto: "https://unsplash.com", 
                 feedbacks: [
                     "Brinda retroalimentación muy constructiva en cada entrega de proyecto.",
                     "Usa herramientas visuales modernas que facilitan el aprendizaje.",
