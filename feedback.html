@@ -43,7 +43,7 @@
             <a href="feedback.html" class="active">Feedback de Docentes</a>
         </nav>
         <div class="nav-auth">
-            <a href="#" id="auth-btn" class="btn-login">Iniciar Sesión</a>
+            <a href="login.html" id="auth-btn" class="btn-login">Iniciar Sesión</a>
         </div>
     </header>
 
@@ -67,29 +67,23 @@
     <!-- SECCIÓN DE FEEDBACKS DINÁMICOS -->
     <main class="feedback-page-container">
         <h1 class="page-title">Feedback de Docentes</h1>
-
-        <!-- Contenedor vacío: El script se encargará de rellenarlo -->
         <div id="teachers-list-container" class="teachers-list"></div>
     </main>
 
-    <!-- LIBRERÍA OFICIAL DE SUPABASE -->
+    <!-- LIBRERÍA OFICIAL DE SUPABASE CORREGIDA -->
     <script src="https://jsdelivr.net"></script>
     
     <script>
-        // REEMPLAZA CON LOS DATOS REALES DE TU PROYECTO (Supabase -> Settings -> API)
-               // REEMPLAZA LAS LÍNEAS 80 A 82 CON ESTO:
-        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; // Pon aquí tu URL real de Supabase
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";        // Pon aquí tu llave Anon real de Supabase
+        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";        
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        
         document.addEventListener('DOMContentLoaded', async () => {
             renderizarContenido();
         });
 
         async function renderizarContenido() {
-            // 1. Validar el estado de la autenticación
             const { data: { user } } = await _supabase.auth.getUser();
             const adminPanel = document.getElementById('admin-panel');
             const authBtn = document.getElementById('auth-btn');
@@ -98,18 +92,17 @@
                 adminPanel.style.display = 'block';
                 authBtn.textContent = 'Cerrar Sesión';
                 authBtn.href = '#';
-                authBtn.onclick = async () => {
+                authBtn.onclick = async (e) => {
+                    e.preventDefault();
                     await _supabase.auth.signOut();
                     location.reload();
                 };
             } else {
                 adminPanel.style.display = 'none';
                 authBtn.textContent = 'Iniciar Sesión';
-                // Apuntar a tu archivo login.html si lo creas independiente
-                authBtn.href = '#'; 
+                authBtn.href = 'login.html'; 
             }
 
-            // 2. Consultar registros de la base de datos
             const { data: feedbacks, error } = await _supabase
                 .from('feedbacks')
                 .select('*')
@@ -120,7 +113,6 @@
                 return;
             }
 
-            // 3. Agrupar comentarios por nombre de docente utilizando un diccionario
             const docentesAgrupados = {};
             feedbacks.forEach(item => {
                 if (!docentesAgrupados[item.docente]) {
@@ -136,7 +128,6 @@
                 });
             });
 
-            // 4. Inyectar la estructura replicando exactamente tu diseño CSS original
             const mainContainer = document.getElementById('teachers-list-container');
             mainContainer.innerHTML = '';
 
@@ -146,7 +137,6 @@
                 const row = document.createElement('div');
                 row.className = 'teacher-row';
 
-                // Bloque izquierdo del perfil
                 const profileDiv = document.createElement('div');
                 profileDiv.className = 'teacher-profile';
                 profileDiv.innerHTML = `
@@ -155,7 +145,6 @@
                     <p class="teacher-dept">${info.facultad}</p>
                 `;
 
-                // Bloque derecho que agrupa las tarjetas de comentarios
                 const cardsContainer = document.createElement('div');
                 cardsContainer.className = 'feedbacks-container';
 
@@ -164,7 +153,6 @@
                     card.className = 'feedback-card';
                     
                     if (user) {
-                        // Si es administrador inyectamos el botón de eliminar alineado a la derecha
                         card.innerHTML = `
                             <div class="feedback-item-inline">
                                 <p>${com.texto}</p>
@@ -183,7 +171,6 @@
             }
         }
 
-        // Evento para añadir un comentario (Solo Administradores)
         document.getElementById('form-add-feedback').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -205,7 +192,6 @@
             }
         });
 
-        // Función para eliminar un comentario individual (Solo Administradores)
         async function eliminarComentario(id) {
             if (confirm('¿Deseas remover permanentemente esta entrada de la plataforma?')) {
                 const { error } = await _supabase.from('feedbacks').delete().eq('id', id);
@@ -219,4 +205,3 @@
     </script>
 </body>
 </html>
-
