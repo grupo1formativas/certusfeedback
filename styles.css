@@ -392,3 +392,117 @@ body {
         flex: none;
     }
 }
+/* --- SECCIÓN EVALUACIONES --- */
+.evaluacion-section {
+    background: linear-gradient(135deg, #eef4f9 0%, #d9e7f5 100%);
+    padding: 60px 10%;
+    font-family: Arial, sans-serif; /* Ajusta según la fuente de tu proyecto */
+}
+
+.evaluacion-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.evaluacion-title-block {
+    max-width: 70%;
+}
+
+.evaluacion-main-title {
+    color: #112b54;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.evaluacion-subtitle {
+    color: #4a5568;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+/* Logotipo de la C en el lado derecho */
+.circle-logo {
+    width: 90px;
+    height: 90px;
+    background-color: #0b2240;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    font-weight: bold;
+    border: 8px solid #ffffff;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Rejilla de tarjetas (3 columnas en pantallas grandes) */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Estilos base de las tarjetas */
+.eval-card {
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.eval-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.eval-card h3 {
+    color: #112b54;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.2;
+    max-width: 80%;
+}
+
+.card-icon {
+    font-size: 1.5rem;
+}
+
+.eval-card p {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Variaciones de color para las filas */
+.bg-white {
+    background-color: #ffffff;
+}
+
+.bg-blue {
+    background-color: #dbe7f6; /* Tono azul claro para las 3 de abajo */
+}
+
+/* Adaptabilidad para móviles */
+@media (max-width: 768px) {
+    .evaluacion-header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .evaluacion-title-block {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+}
