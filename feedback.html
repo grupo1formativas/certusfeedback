@@ -4,206 +4,245 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CERTUS - Feedback de Docentes</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Estilo rápido para el panel de inserción superior -->
     <style>
-        .admin-panel-box {
-            display: none;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 25px;
-            background-color: #f4f7fc;
-            border: 2px dashed #0b1b3d;
+        :root {
+            --primary-color: #0b1b3d;
+            --accent-color: #00bfa5;
+            --bg-body: #4c7c64; /* Color de fondo verde de tu captura */
+            --bg-card: #ffffff;
+            --text-dark: #333333;
+            --text-muted: #777777;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            width: 100%;
+            max-width: 900px;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 2rem;
+        }
+
+        .underline {
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 0 auto 40px auto;
+            border-radius: 2px;
+        }
+
+        /* Contenedor de la lista de docentes */
+        #docentes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Tarjeta de cada docente */
+        .teacher-card {
+            display: flex;
+            align-items: center;
+            border: 1px solid #eef2f5;
             border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            gap: 40px;
         }
-        .admin-form {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+
+        /* Bloque de perfil izquierdo */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 160px;
         }
-        .admin-form textarea { grid-column: span 2; height: 80px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-        .admin-form input, .admin-form select { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-        .admin-form button { grid-column: span 2; padding: 12px; background-color: #0b1b3d; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .admin-form button:hover { background-color: #16326c; }
-        .btn-delete-comment { background: #dc3545; color: white; border: none; padding: 4px 8px; margin-left: 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
-        .feedback-item-inline { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+
+        .avatar-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+        }
+
+        /* Círculo decorativo verde superior */
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 3px solid var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .profile-section h2 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+        }
+
+        .profile-section p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        /* Bloque de comentarios derecho */
+        .feedbacks-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feedback-bubble {
+            background-color: #ffffff;
+            border: 1px solid #eef2f5;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #555;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+        }
+
+        .feedback-bubble::before {
+            content: '"';
+            color: #ccc;
+            font-family: serif;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 8px;
+            top: 6px;
+            line-height: 1;
+        }
+        
+        .feedback-bubble span {
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        /* Responsive para celulares */
+        @media (max-width: 768px) {
+            .teacher-card {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+            body { padding: 15px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN -->
-    <header class="navbar">
-        <div class="logo-container">
-            <img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
-        </div>
-        <nav class="nav-menu">
-            <a href="index.html">Inicio</a>
-            <a href="evaluaciones.html">Evaluaciones</a>
-            <a href="#">Cuestionarios</a>
-            <a href="feedback.html" class="active">Feedback de Docentes</a>
-        </nav>
-        <div class="nav-auth">
-            <a href="login.html" id="auth-btn" class="btn-login">Iniciar Sesión</a>
-        </div>
-    </header>
+    <div class="container">
+        <h1>Feedback de Docentes</h1>
+        <div class="underline"></div>
 
-    <!-- FORMULARIO EXCLUSIVO PARA ADMINISTRADORES -->
-    <div id="admin-panel" class="admin-panel-box">
-        <h2 style="color: #0b1b3d; margin-top: 0; margin-bottom: 15px;">Gestión de Feedbacks (Modo Administrador)</h2>
-        <form id="form-add-feedback" class="admin-form">
-            <input type="text" id="input-docente" placeholder="Ej: Prof. Carlos Mendoza" required>
-            <input type="text" id="input-facultad" placeholder="Ej: Facultad de Negocios" required>
-            <select id="input-foto" required>
-                <option value="profe 1.png">Silueta Masculina (profe 1.png)</option>
-                <option value="profe 2.png">Silueta Femenina (profe 2.png)</option>
-                <option value="profe 3.png">Silueta Masculina Alterna (profe 3.png)</option>
-            </select>
-            <span style="align-self: center; color: #555; font-size: 0.9rem;">Selecciona el avatar correspondiente</span>
-            <textarea id="input-comentario" placeholder="Escribe la retroalimentación o comentario del estudiante..." required></textarea>
-            <button type="submit">Agregar Comentario al Docente</button>
-        </form>
+        <!-- Los docentes se inyectarán aquí automáticamente -->
+        <div id="docentes-list"></div>
     </div>
 
-    <!-- SECCIÓN DE FEEDBACKS DINÁMICOS -->
-    <main class="feedback-page-container">
-        <h1 class="page-title">Feedback de Docentes</h1>
-        <div id="teachers-list-container" class="teachers-list"></div>
-    </main>
-
-    <!-- LIBRERÍA OFICIAL DE SUPABASE CORREGIDA -->
-<script src="supabase.js"></script>
-
-
-    
     <script>
-        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";        
-
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            renderizarContenido();
-        });
-
-        async function renderizarContenido() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            const adminPanel = document.getElementById('admin-panel');
-            const authBtn = document.getElementById('auth-btn');
-
-            if (user) {
-                adminPanel.style.display = 'block';
-                authBtn.textContent = 'Cerrar Sesión';
-                authBtn.href = '#';
-                authBtn.onclick = async (e) => {
-                    e.preventDefault();
-                    await _supabase.auth.signOut();
-                    location.reload();
-                };
-            } else {
-                adminPanel.style.display = 'none';
-                authBtn.textContent = 'Iniciar Sesión';
-                authBtn.href = 'login.html'; 
+        // ZONA DE EDICIÓN: Aquí cambias los textos, imágenes y nombres fácilmente
+        const infoDocentes = [
+            {
+                nombre: "Prof. Carlos Mendoza",
+                facultad: "Facultad de Negocios",
+                foto: "https://unsplash.com", // Reemplaza por la ruta de tu imagen local
+                feedbacks: [
+                    "Excelente metodología de enseñanza y gran dominio de los temas prácticos.",
+                    "Siempre está dispuesto a resolver dudas fuera del horario de clases.",
+                    "Sus evaluaciones son justas y alineadas con lo avanzado en el ciclo."
+                ]
+            },
+            {
+                nombre: "Prof. Ana Rivas",
+                facultad: "Facultad de Tecnología",
+                foto: "https://unsplash.com", // Reemplaza por la ruta de tu imagen local
+                feedbacks: [
+                    "Promueve la participación constante y hace las clases muy dinámicas.",
+                    "Puntual y muy organizada con el material que comparte en el portal.",
+                    "Tiene mucha paciencia al explicar conceptos complejos de programación."
+                ]
+            },
+            {
+                nombre: "Prof. Luis Torres",
+                facultad: "Facultad de Diseño",
+                foto: "https://unsplash.com", // Reemplaza por la ruta de tu imagen local
+                feedbacks: [
+                    "Brinda retroalimentación muy constructiva en cada entrega de proyecto.",
+                    "Usa herramientas visuales modernas que facilitan el aprendizaje.",
+                    "Motiva a los estudiantes a ir más allá de la currícula estándar."
+                ]
             }
+        ];
 
-            const { data: feedbacks, error } = await _supabase
-                .from('feedbacks')
-                .select('*')
-                .order('created_at', { ascending: false });
+        // Función que renderiza todo automáticamente en la interfaz
+        function cargarFeedbacks() {
+            const contenedor = document.getElementById('docentes-list');
+            contenedor.innerHTML = ''; // Limpiar contenedor
 
-            if (error) {
-                console.error("Error cargando feedbacks:", error);
-                return;
-            }
-
-            const docentesAgrupados = {};
-            feedbacks.forEach(item => {
-                if (!docentesAgrupados[item.docente]) {
-                    docentesAgrupados[item.docente] = {
-                        facultad: item.facultad,
-                        foto: item.foto_url,
-                        comentarios: []
-                    };
-                }
-                docentesAgrupados[item.docente].comentarios.push({
-                    id: item.id,
-                    texto: item.comentario
+            infoDocentes.forEach(docente => {
+                // Crear estructura de comentarios
+                let htmlFeedbacks = '';
+                docente.feedbacks.forEach(comentario => {
+                    htmlFeedbacks += `<div class="feedback-bubble"><span>${comentario}</span></div>`;
                 });
-            });
 
-            const mainContainer = document.getElementById('teachers-list-container');
-            mainContainer.innerHTML = '';
-
-            for (const nombreDocente in docentesAgrupados) {
-                const info = docentesAgrupados[nombreDocente];
-
-                const row = document.createElement('div');
-                row.className = 'teacher-row';
-
-                const profileDiv = document.createElement('div');
-                profileDiv.className = 'teacher-profile';
-                profileDiv.innerHTML = `
-                    <img src="${info.foto}" alt="Foto de ${nombreDocente}" class="teacher-img">
-                    <h3>${nombreDocente}</h3>
-                    <p class="teacher-dept">${info.facultad}</p>
-                `;
-
-                const cardsContainer = document.createElement('div');
-                cardsContainer.className = 'feedbacks-container';
-
-                info.comentarios.forEach(com => {
-                    const card = document.createElement('div');
-                    card.className = 'feedback-card';
-                    
-                    if (user) {
-                        card.innerHTML = `
-                            <div class="feedback-item-inline">
-                                <p>${com.texto}</p>
-                                <button class="btn-delete-comment" onclick="eliminarComentario(${com.id})">❌</button>
+                // Crear la tarjeta HTML del docente
+                const tarjeta = `
+                    <div class="teacher-card">
+                        <div class="profile-section">
+                            <div class="avatar-container">
+                                <img src="${docente.foto}" alt="${docente.nombre}">
                             </div>
-                        `;
-                    } else {
-                        card.innerHTML = `<p>${com.texto}</p>`;
-                    }
-                    cardsContainer.appendChild(card);
-                });
-
-                row.appendChild(profileDiv);
-                row.appendChild(cardsContainer);
-                mainContainer.appendChild(row);
-            }
+                            <h2>${docente.nombre}</h2>
+                            <p>${docente.facultad}</p>
+                        </div>
+                        <div class="feedbacks-section">
+                            ${htmlFeedbacks}
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += tarjeta;
+            });
         }
 
-        document.getElementById('form-add-feedback').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const nuevoRegistro = {
-                docente: document.getElementById('input-docente').value,
-                facultad: document.getElementById('input-facultad').value,
-                foto_url: document.getElementById('input-foto').value,
-                comentario: document.getElementById('input-comentario').value
-            };
-
-            const { error } = await _supabase.from('feedbacks').insert([nuevoRegistro]);
-
-            if (error) {
-                alert('No dispones de privilegios para escribir cambios directos.');
-            } else {
-                alert('Comentario agregado exitosamente al perfil del docente.');
-                document.getElementById('input-comentario').value = '';
-                renderizarContenido();
-            }
-        });
-
-        async function eliminarComentario(id) {
-            if (confirm('¿Deseas remover permanentemente esta entrada de la plataforma?')) {
-                const { error } = await _supabase.from('feedbacks').delete().eq('id', id);
-                if (error) {
-                    alert('Error de autenticación. No se pudo procesar la remoción.');
-                } else {
-                    renderizarContenido();
-                }
-            }
-        }
+        // Ejecutar la carga al abrir la página
+        document.addEventListener('DOMContentLoaded', cargarFeedbacks);
     </script>
 </body>
 </html>
