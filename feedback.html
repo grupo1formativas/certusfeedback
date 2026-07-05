@@ -8,7 +8,7 @@
         :root {
             --primary-color: #0b1b3d;
             --accent-color: #00bfa5;
-            --bg-body: #4c7c64; /* Color de fondo verde de tu captura */
+            --bg-body: #4c7c64; /* Color verde de fondo */
             --bg-card: #ffffff;
             --text-dark: #333333;
             --text-muted: #777777;
@@ -18,9 +18,56 @@
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: var(--bg-body);
             margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ==================== ESTILOS DE LA BARRA SUPERIOR ==================== */
+        .navbar {
+            width: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container .logo {
+            height: 45px; /* Ajusta según el tamaño de tu logo */
+            display: block;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent-color);
+        }
+
+        /* ==================== CONTENEDOR PRINCIPAL DE FEEDBACKS ==================== */
+        .main-content {
             padding: 40px 20px;
+            width: 100%;
             display: flex;
             justify-content: center;
+            box-sizing: border-box;
         }
 
         .container {
@@ -49,7 +96,6 @@
             border-radius: 2px;
         }
 
-        /* Contenedor de la lista de docentes */
         #docentes-list {
             display: flex;
             flex-direction: column;
@@ -65,9 +111,10 @@
             padding: 24px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
             gap: 40px;
+            background: #ffffff;
         }
 
-        /* Bloque de perfil izquierdo */
+        /* Perfil izquierdo */
         .profile-section {
             display: flex;
             flex-direction: column;
@@ -88,10 +135,8 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid transparent;
         }
 
-        /* Círculo decorativo verde superior */
         .avatar-container::before {
             content: '';
             position: absolute;
@@ -119,7 +164,7 @@
             font-weight: bold;
         }
 
-        /* Bloque de comentarios derecho */
+        /* Comentarios derecho */
         .feedbacks-section {
             flex-grow: 1;
             display: flex;
@@ -135,7 +180,6 @@
             font-size: 0.9rem;
             color: #555;
             position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.01);
         }
 
         .feedback-bubble::before {
@@ -154,34 +198,58 @@
             display: inline-block;
         }
 
-        /* Responsive para celulares */
+        /* Adaptación móvil */
         @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            .nav-menu {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
             .teacher-card {
                 flex-direction: column;
                 gap: 20px;
                 padding: 20px;
             }
-            body { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Feedback de Docentes</h1>
-        <div class="underline"></div>
+    <!-- BARRA DE NAVEGACIÓN RESTAURADA -->
+    <header class="navbar">
+        <div class="logo-container">
+            <img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="evaluaciones.html">Evaluaciones</a>
+            <a href="#">Cuestionarios</a>
+            <a href="feedback.html" style="color: var(--accent-color);">Feedback de Docentes</a>
+        </nav>
+    </header>
 
-        <!-- Los docentes se inyectarán aquí automáticamente -->
-        <div id="docentes-list"></div>
-    </div>
+    <!-- CONTENIDO DE LOS COMENTARIOS -->
+    <main class="main-content">
+        <div class="container">
+            <h1>Feedback de Docentes</h1>
+            <div class="underline"></div>
+
+            <div id="docentes-list"></div>
+        </div>
+    </main>
 
     <script>
-        // ZONA DE EDICIÓN: Aquí cambias los textos, imágenes y nombres fácilmente
+        // ZONA DE EDICIÓN: Modifica fácilmente los contenidos aquí abajo
         const infoDocentes = [
             {
                 nombre: "Prof. Carlos Mendoza",
                 facultad: "Facultad de Negocios",
-                foto: "profe 1.png", // Reemplaza por la ruta de tu imagen local
+                foto: "profe 1.png", 
                 feedbacks: [
                     "Excelente metodología de enseñanza y gran dominio de los temas prácticos.",
                     "Siempre está dispuesto a resolver dudas fuera del horario de clases.",
@@ -191,7 +259,7 @@
             {
                 nombre: "Prof. Ana Rivas",
                 facultad: "Facultad de Tecnología",
-                foto: "profe 2.png", // Reemplaza por la ruta de tu imagen local
+                foto: "profe 2.png", 
                 feedbacks: [
                     "Promueve la participación constante y hace las clases muy dinámicas.",
                     "Puntual y muy organizada con el material que comparte en el portal.",
@@ -201,7 +269,7 @@
             {
                 nombre: "Prof. Luis Torres",
                 facultad: "Facultad de Diseño",
-                foto: "profe 3.png", // Reemplaza por la ruta de tu imagen local
+                foto: "profe 3.png", 
                 feedbacks: [
                     "Brinda retroalimentación muy constructiva en cada entrega de proyecto.",
                     "Usa herramientas visuales modernas que facilitan el aprendizaje.",
@@ -210,19 +278,16 @@
             }
         ];
 
-        // Función que renderiza todo automáticamente en la interfaz
         function cargarFeedbacks() {
             const contenedor = document.getElementById('docentes-list');
-            contenedor.innerHTML = ''; // Limpiar contenedor
+            contenedor.innerHTML = '';
 
             infoDocentes.forEach(docente => {
-                // Crear estructura de comentarios
                 let htmlFeedbacks = '';
                 docente.feedbacks.forEach(comentario => {
                     htmlFeedbacks += `<div class="feedback-bubble"><span>${comentario}</span></div>`;
                 });
 
-                // Crear la tarjeta HTML del docente
                 const tarjeta = `
                     <div class="teacher-card">
                         <div class="profile-section">
@@ -241,7 +306,6 @@
             });
         }
 
-        // Ejecutar la carga al abrir la página
         document.addEventListener('DOMContentLoaded', cargarFeedbacks);
     </script>
 </body>
