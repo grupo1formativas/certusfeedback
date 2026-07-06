@@ -213,7 +213,22 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Arreglo global temporal para almacenar lo que viene de la BD
 let listaDocentesGlobal = [];
-
+// Variable global para controlar si el usuario está autorizado
+let esUsuarioAutorizado = false;
+// FUNCIÓN PARA VERIFICAR SI EL USUARIO INICIÓ SESIÓN
+async function verificarAutenticacion() {
+    // Obtenemos la sesión actual del usuario
+    const { data: { session } } = await _supabase.auth.getSession();
+    
+    if (session && session.user) {
+        esUsuarioAutorizado = true;
+    } else {
+        esUsuarioAutorizado = false;
+    }
+    
+    // Una vez que sabemos si está logueado o no, cargamos los feedbacks
+    await cargarFeedbacksDesdeSupabase();
+}
 // 1. FUNCIÓN PARA CARGAR LOS DATOS DESDE SUPABASE
 async function cargarFeedbacksDesdeSupabase() {
     try {
@@ -249,6 +264,9 @@ async function cargarFeedbacksDesdeSupabase() {
                     `;
                 });
             }
+const botonEditar = esUsuarioAutorizado 
+    ? `<button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>`
+    : '';
 
             const tarjeta = `
                 <div class="teacher-card" id="card-${index}">
@@ -258,7 +276,8 @@ async function cargarFeedbacksDesdeSupabase() {
                         </div>
                         <h2>${docente.nombre}</h2>
                         <p>${docente.facultad}</p>
-                        <button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>
+                        ${botonEditar}
+
                     </div>
                     <div class="feedbacks-section" id="feedbacks-container-${index}">
                         ${htmlFeedbacks}
