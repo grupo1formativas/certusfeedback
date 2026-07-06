@@ -205,8 +205,8 @@
 
 
 <script>
-// CREDENCIALES OPTIMIZADAS
-const SUPABASE_URL = "https://supabase.co"; 
+// CREDENCIALES OPTIMIZADAS (URL CORREGIDA)
+const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
 
 // Inicializar cliente usando la librería oficial de Supabase
@@ -216,20 +216,27 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let listaDocentesGlobal = [];
 // Variable global para controlar si el usuario está autorizado
 let esUsuarioAutorizado = false;
+
 // FUNCIÓN PARA VERIFICAR SI EL USUARIO INICIÓ SESIÓN
 async function verificarAutenticacion() {
-    // Obtenemos la sesión actual del usuario
-    const { data: { session } } = await _supabase.auth.getSession();
-    
-    if (session && session.user) {
-        esUsuarioAutorizado = true;
-    } else {
+    try {
+        // Obtenemos la sesión actual del usuario
+        const { data: { session } } = await _supabase.auth.getSession();
+        
+        if (session && session.user) {
+            esUsuarioAutorizado = true;
+        } else {
+            esUsuarioAutorizado = false;
+        }
+    } catch (e) {
+        console.error("Error verificando sesión:", e);
         esUsuarioAutorizado = false;
     }
     
     // Una vez que sabemos si está logueado o no, cargamos los feedbacks
     await cargarFeedbacksDesdeSupabase();
 }
+
 // 1. FUNCIÓN PARA CARGAR LOS DATOS DESDE SUPABASE
 async function cargarFeedbacksDesdeSupabase() {
     try {
@@ -247,6 +254,7 @@ async function cargarFeedbacksDesdeSupabase() {
         listaDocentesGlobal = docentes; 
 
         const contenedor = document.getElementById('docentes-list');
+        if (!contenedor) return;
         contenedor.innerHTML = '';
 
         if (!docentes || docentes.length === 0) {
@@ -265,9 +273,10 @@ async function cargarFeedbacksDesdeSupabase() {
                     `;
                 });
             }
-const botonEditar = esUsuarioAutorizado 
-    ? `<button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>`
-    : '';
+
+            const botonEditar = esUsuarioAutorizado 
+                ? `<button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>`
+                : '';
 
             const tarjeta = `
                 <div class="teacher-card" id="card-${index}">
@@ -278,7 +287,6 @@ const botonEditar = esUsuarioAutorizado
                         <h2>${docente.nombre}</h2>
                         <p>${docente.facultad}</p>
                         ${botonEditar}
-
                     </div>
                     <div class="feedbacks-section" id="feedbacks-container-${index}">
                         ${htmlFeedbacks}
@@ -345,9 +353,5 @@ async function guardarCambiosSupabase(index, docenteId) {
     }
 }
 
-// Ejecución automática al abrir la pantalla
-document.addEventListener('DOMContentLoaded', cargarFeedbacksDesdeSupabase);
-</script>
-
-</body>
-</html>
+// CORREGIDO: Llama primero a verificar la autenticación
+document.addEventListener('DOMContentLoaded', verificarAutenticacion);
