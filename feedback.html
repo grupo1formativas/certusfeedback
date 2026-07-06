@@ -134,14 +134,16 @@
         }
 
         .feedback-bubble {
-            background-color: #ffffff;
-            border: 1px solid #eef2f5;
-            padding: 14px 20px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            color: #555;
-            position: relative;
-        }
+    background-color: #ffffff;
+    border: 1px solid #eef2f5;
+    padding: 14px 20px 14px 35px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #555;
+    position: relative;
+    font-style: italic; /* <--- Agrega esta línea para la letra cursiva */
+}
+
 
         .feedback-bubble::before {
             content: '"';
@@ -267,11 +269,10 @@ async function cargarFeedbacksDesdeSupabase() {
             let htmlFeedbacks = '';
             if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
                 docente.feedbacks.forEach((comentario, cIndex) => {
-                    htmlFeedbacks += `
-                        <div class="feedback-bubble">
-                            <span id="text-${index}-${cIndex}">${comentario}</span>
-                        </div>
-                    `;
+                            docente.feedbacks.forEach((comentario, cIndex) => {
+            htmlFeedbacks += `<div class="feedback-bubble"><span id="text-${index}-${cIndex}">${comentario}</span></div>`;
+        });
+
                 });
             }
 
