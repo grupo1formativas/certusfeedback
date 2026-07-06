@@ -608,3 +608,48 @@ body {
         font-size: 1.4rem;
     }
 }
+/* Tarjeta del docente adaptada a la referencia */
+.teacher-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #eef2f5;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    gap: 40px;
+    background: #ffffff;
+}
+
+/* Sección de comentarios del bloque derecho */
+.feedbacks-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Cuadro de texto estilizado e idéntico al diseño */
+.feedback-bubble {
+    background-color: #ffffff;
+    border: 1px solid #eef2f5;
+    padding: 14px 20px 14px 35px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #555;
+    position: relative;
+    font-style: italic; /* Aplica la tipografía en cursiva */
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+}
+
+/* Comilla decorativa estilizada del diseño */
+.feedback-bubble::before {
+    content: '“';
+    color: #ccc;
+    font-family: serif;
+    font-size: 1.8rem;
+    position: absolute;
+    left: 12px;
+    top: 6px;
+    line-height: 1;
+}
