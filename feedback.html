@@ -310,8 +310,9 @@ function habilitarEdicion(index, docenteId) {
 
     docente.feedbacks.forEach((comentario, cIndex) => {
         htmlInputs += `
-            <div class="feedback-bubble" style="padding: 10px;">
-                <input type="text" value="${comentario}" class="input-feedback-${index}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <div class="feedback-bubble" style="padding: 10px 10px 10px 35px;">
+                <input type="text" value="${comentario}" class="input-feedback-${index}" 
+                style="width: 100%; padding: 8px; border: 1px solid #00bfa5; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; font-style: italic; color: #555; font-family: inherit;">
             </div>
         `;
     });
@@ -324,6 +325,7 @@ function habilitarEdicion(index, docenteId) {
     btnAction.style.color = "#fff";
     btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
 }
+
 
 // 3. ENVÍA LOS CAMBIOS EDITADOS A TU TABLA DE SUPABASE
 async function guardarCambiosSupabase(index, docenteId) {
