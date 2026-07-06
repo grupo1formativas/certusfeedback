@@ -1,321 +1,358 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CERTUS - Feedback de Docentes</title>
-<!-- VINCULACIÓN CON TU HOJA DE ESTILOS EXISTENTE -->
-<link rel="stylesheet" href="styles.css">
-<style>
-/* ESTILOS EXCLUSIVOS PARA LAS TARJETAS DE FEEDBACK */
-:root {
---accent-green: #00bfa5;
---bg-body-green: #4c7c64; /* Verde mate de fondo de la imagen */
---text-navy: #0b1b3d;
---text-muted: #777777;
---border-light: #eef2f5;
-}
-body {
-background-color: var(--bg-body-green) !important; 
-margin: 0;
-padding: 0;
-font-family: 'Segoe UI', Arial, sans-serif;
-}
-/* Contenedor principal debajo de la navbar */
-.main-content {
-padding: 40px 20px;
-width: 100%;
-display: flex;
-justify-content: center;
-box-sizing: border-box;
-}
-.feedback-container {
-background-color: #ffffff;
-width: 100%;
-max-width: 950px;
-border-radius: 16px;
-padding: 40px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-box-sizing: border-box;
-}
-.feedback-container h1 {
-color: var(--text-navy);
-text-align: center;
-margin-top: 0;
-margin-bottom: 8px;
-font-size: 2rem;
-}
-.underline {
-width: 60px;
-height: 4px;
-background-color: var(--accent-green);
-margin: 0 auto 40px auto;
-border-radius: 2px;
-}
-#docentes-list {
-display: flex;
-flex-direction: column;
-gap: 30px;
-}
-/* Tarjeta de cada docente según la imagen de referencia */
-.teacher-card {
-display: flex;
-align-items: center;
-border: 1px solid var(--border-light);
-border-radius: 12px;
-padding: 30px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-gap: 40px;
-background: #ffffff;
-}
-/* Perfil izquierdo */
-.profile-section {
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
-min-width: 180px;
-}
-.avatar-container {
-position: relative;
-width: 110px;
-height: 110px;
-margin-bottom: 15px;
-}
-.avatar-container img {
-width: 100%;
-height: 100%;
-border-radius: 50%;
-object-fit: cover;
-}
-/* Círculo verde exterior de la foto de perfil */
-.avatar-container::before {
-content: '';
-position: absolute;
-top: -4px;
-left: -4px;
-right: -4px;
-bottom: -4px;
-border: 3px solid var(--accent-green);
-border-radius: 50%;
-pointer-events: none;
-}
-.profile-section h2 {
-font-size: 1.05rem;
-color: var(--text-navy);
-margin: 0 0 5px 0;
-font-weight: bold;
-}
-.profile-section p {
-font-size: 0.75rem;
-color: var(--text-muted);
-text-transform: uppercase;
-letter-spacing: 0.5px;
-margin: 0;
-font-weight: bold;
-}
-/* Comentarios derecho estilo burbuja limpia de la imagen */
-.feedbacks-section {
-flex-grow: 1;
-display: flex;
-flex-direction: column;
-gap: 12px;
-}
-.feedback-bubble {
-background-color: #ffffff;
-border: 1px solid var(--border-light);
-padding: 14px 20px 14px 35px;
-border-radius: 6px;
-font-size: 0.9rem;
-color: #555;
-position: relative;
-font-style: italic; /* Cursiva idéntica a la imagen */
-text-align: left;
-box-shadow: 0 2px 5px rgba(0,0,0,0.01);
-}
-.feedback-bubble::before {
-content: '“';
-color: #ccc;
-font-family: serif;
-font-size: 1.8rem;
-position: absolute;
-left: 12px;
-top: 6px;
-line-height: 1;
-}
-/* Estilo del botón personalizado */
-.btn-action-style {
-margin-top: 15px;
-padding: 8px 18px;
-cursor: pointer;
-border-radius: 20px;
-border: none;
-font-weight: bold;
-font-size: 0.85rem;
-transition: background 0.2s ease;
-}
-/* Adaptación móvil */
-@media (max-width: 768px) {
-.teacher-card {
-flex-direction: column;
-gap: 20px;
-padding: 20px;
-}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERTUS - Feedback de Docentes</title>
+    <!-- VINCULACIÓN CON TU HOJA DE ESTILOS EXISTENTE -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* ESTILOS EXCLUSIVOS PARA LAS TARJETAS DE FEEDBACK */
+        :root {
+            --accent-green: #00bfa5;
+            --bg-body-green: #4c7c64; /* Color verde de fondo */
+        }
+
+        body {
+            background-color: var(--bg-body-green) !important; /* Fuerza el fondo verde */
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* Contenedor principal debajo de la navbar */
+        .main-content {
+            padding: 40px 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .feedback-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 900px;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+        }
+
+        .feedback-container h1 {
+            color: #0b1b3d;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 2rem;
+        }
+
+        .underline {
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-green);
+            margin: 0 auto 40px auto;
+            border-radius: 2px;
+        }
+
+        #docentes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Tarjeta de cada docente */
+        .teacher-card {
+            display: flex;
+            align-items: center;
+            border: 1px solid #eef2f5;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            gap: 40px;
+            background: #ffffff;
+        }
+
+        /* Perfil izquierdo */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 160px;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin-bottom: 15px;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Círculo verde exterior de la foto */
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 3px solid var(--accent-green);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .profile-section h2 {
+            font-size: 1.1rem;
+            color: #0b1b3d;
+            margin: 0 0 5px 0;
+        }
+
+        .profile-section p {
+            font-size: 0.8rem;
+            color: #777777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        /* Comentarios derecho */
+        .feedbacks-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feedback-bubble {
+            background-color: #ffffff;
+            border: 1px solid #eef2f5;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #555;
+            position: relative;
+        }
+
+        .feedback-bubble::before {
+            content: '"';
+            color: #ccc;
+            font-family: serif;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 8px;
+            top: 6px;
+            line-height: 1;
+        }
+        
+        .feedback-bubble span {
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        /* Adaptación móvil */
+        @media (max-width: 768px) {
+            .teacher-card {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-<!-- BARRA DE NAVEGACIÓN -->
-<header class="navbar" style="padding: 0; display: block; background-color: #ffffff; width: 100%;">
-<div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-sizing: border-box;">
-<div class="logo-container">
-<img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
-</div>
-<nav class="nav-menu">
-<a href="index.html">Inicio</a>
-<a href="evaluaciones.html">Evaluaciones</a>
-<a href="#">Cuestionarios</a>
-<a href="feedback.html" class="active">Feedback de Docentes</a>
-</nav>
-<div class="nav-auth">
-<a href="login.html" id="auth-btn" class="btn-login">Iniciar Sesión</a>
-</div>
-</div>
-</header>
-<!-- CUERPO DE FEEDBACKS -->
-<main class="main-content">
-<div class="feedback-container">
-<h1>Feedback de Docentes</h1>
-<div class="underline"></div>
-<!-- Listado dinámico -->
-<div id="docentes-list"></div>
-</div>
-</main>
-<!-- CDN OFICIAL DE SUPABASE -->
+
+    <!-- BARRA DE NAVEGACIÓN CORREGIDA Y CENTRADA -->
+    <header class="navbar" style="padding: 0; display: block; background-color: #ffffff; width: 100%;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; box-sizing: border-box;">
+            <div class="logo-container">
+                <img src="Captura de pantalla 2026-06-30 122821.png" alt="Logo CERTUS" class="logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html">Inicio</a>
+                <a href="evaluaciones.html">Evaluaciones</a>
+                <a href="#">Cuestionarios</a>
+                <a href="feedback.html" class="active">Feedback de Docentes</a>
+            </nav>
+            <div class="nav-auth">
+                <a href="login.html" id="auth-btn" class="btn-login">Iniciar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CUERPO DE FEEDBACKS -->
+    <main class="main-content">
+        <div class="feedback-container">
+            <h1>Feedback de Docentes</h1>
+            <div class="underline"></div>
+
+            <!-- Listado dinámico -->
+            <div id="docentes-list"></div>
+        </div>
+    </main>
+
+    <!-- 1. CDN OFICIAL DE SUPABASE (CORREGIDA Y COMPLETA) -->
 <script src="supabase.js"></script>
+
+
+
 <script>
 // CREDENCIALES OPTIMIZADAS (URL CORREGIDA)
 const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
-// Inicializar cliente
+
+// Inicializar cliente usando la librería oficial de Supabase
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Arreglo global temporal para almacenar lo que viene de la BD
 let listaDocentesGlobal = [];
+// Variable global para controlar si el usuario está autorizado
 let esUsuarioAutorizado = false;
-// VERIFICAR SESIÓN ACTIVA
+
+// FUNCIÓN PARA VERIFICAR SI EL USUARIO INICIÓ SESIÓN
 async function verificarAutenticacion() {
-try {
-const { data: { session } } = await _supabase.auth.getSession();
-esUsuarioAutorizado = !!(session && session.user);
-} catch (e) {
-console.error("Error verificando sesión:", e);
-esUsuarioAutorizado = false;
+    try {
+        // Obtenemos la sesión actual del usuario
+        const { data: { session } } = await _supabase.auth.getSession();
+        
+        if (session && session.user) {
+            esUsuarioAutorizado = true;
+        } else {
+            esUsuarioAutorizado = false;
+        }
+    } catch (e) {
+        console.error("Error verificando sesión:", e);
+        esUsuarioAutorizado = false;
+    }
+    
+    // Una vez que sabemos si está logueado o no, cargamos los feedbacks
+    await cargarFeedbacksDesdeSupabase();
 }
-await cargarFeedbacksDesdeSupabase();
-}
-// 1. CARGAR DATOS DESDE LA TABLA SUPABASE
+
+// 1. FUNCIÓN PARA CARGAR LOS DATOS DESDE SUPABASE
 async function cargarFeedbacksDesdeSupabase() {
-try {
-const { data: docentes, error } = await _supabase
-.from('docentes')
-.select('*')
-.order('id', { ascending: true });
-if (error) {
-console.error("Error cargando datos de Supabase:", error);
-alert("No se pudieron cargar los datos: " + error.message);
-return;
+    try {
+        const { data: docentes, error } = await _supabase
+            .from('docentes')
+            .select('*')
+            .order('id', { ascending: true });
+
+        if (error) {
+            console.error("Error cargando datos de Supabase:", error);
+            alert("No se pudieron cargar los datos de la base de datos: " + error.message);
+            return;
+        }
+
+        listaDocentesGlobal = docentes; 
+
+        const contenedor = document.getElementById('docentes-list');
+        if (!contenedor) return;
+        contenedor.innerHTML = '';
+
+        if (!docentes || docentes.length === 0) {
+            contenedor.innerHTML = '<p style="text-align:center; color:#555;">No se encontraron docentes en la tabla.</p>';
+            return;
+        }
+
+        docentes.forEach((docente, index) => {
+            let htmlFeedbacks = '';
+            if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
+                docente.feedbacks.forEach((comentario, cIndex) => {
+                    htmlFeedbacks += `
+                        <div class="feedback-bubble">
+                            <span id="text-${index}-${cIndex}">${comentario}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            const botonEditar = esUsuarioAutorizado 
+                ? `<button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>`
+                : '';
+
+            const tarjeta = `
+                <div class="teacher-card" id="card-${index}">
+                    <div class="profile-section">
+                        <div class="avatar-container">
+                            <img src="${docente.foto}" alt="${docente.nombre}" onerror="this.src='https://placeholder.com';">
+                        </div>
+                        <h2>${docente.nombre}</h2>
+                        <p>${docente.facultad}</p>
+                        ${botonEditar}
+                    </div>
+                    <div class="feedbacks-section" id="feedbacks-container-${index}">
+                        ${htmlFeedbacks}
+                    </div>
+                </div>
+            `;
+            contenedor.innerHTML += tarjeta;
+        });
+    } catch (err) {
+        console.error("Error inesperado:", err);
+    }
 }
-listaDocentesGlobal = docentes; 
-const contenedor = document.getElementById('docentes-list');
-if (!contenedor) return;
-contenedor.innerHTML = '';
-if (!docentes || docentes.length === 0) {
-contenedor.innerHTML = '<p style="text-align:center; color:#555;">No se encontraron docentes en la tabla.</p>';
-return;
-}
-docentes.forEach((docente, index) => {
-let htmlFeedbacks = '';
-if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
-docente.feedbacks.forEach((comentario, cIndex) => {
-htmlFeedbacks += `
-<div class="feedback-bubble">
-<span id="text-${index}-${cIndex}">${comentario}</span>
-</div>
-`;
-});
-}
-// Botón "Editar" estilizado de forma sutil abajo del perfil
-const botonEditar = esUsuarioAutorizado 
-? `<button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-action-style" style="background:#eef2f5; color:#555;" id="btn-action-${index}">Editar</button>`
-: '';
-const tarjeta = `
-<div class="teacher-card" id="card-${index}">
-<div class="profile-section">
-<div class="avatar-container">
-<img src="${docente.foto}" alt="${docente.nombre}" onerror="this.src='https://placeholder.com';">
-</div>
-<h2>Prof. ${docente.nombre}</h2>
-<p>${docente.facultad}</p>
-${botonEditar}
-</div>
-<div class="feedbacks-section" id="feedbacks-container-${index}">
-${htmlFeedbacks}
-</div>
-</div>
-`;
-contenedor.innerHTML += tarjeta;
-});
-} catch (err) {
-console.error("Error inesperado:", err);
-}
-}
-// 2. ACTIVA LOS INPUTS MANTENIENDO EL DISEÑO VISUAL
+
+// 2. ACTIVA LOS INPUTS EN LA TARJETA SELECCIONADA
 function habilitarEdicion(index, docenteId) {
-const docente = listaDocentesGlobal[index];
-const contenedorFeedbacks = document.getElementById(`feedbacks-container-${index}`);
-let htmlInputs = '';
-docente.feedbacks.forEach((comentario, cIndex) => {
-htmlInputs += `
-<div class="feedback-bubble" style="padding: 10px 10px 10px 35px;">
-<input type="text" value="${comentario}" class="input-feedback-${index}" 
-style="width: 100%; padding: 8px; border: 1px solid var(--accent-green); border-radius: 4px; box-sizing: border-box; font-size: 0.9rem; font-style: italic; color: #555; font-family: inherit;">
-</div>
-`;
-});
-contenedorFeedbacks.innerHTML = htmlInputs;
-// Transforma el botón de acción a "Guardar" con el color verde brillante de la paleta
-const btnAction = document.getElementById(`btn-action-${index}`);
-btnAction.innerText = "Guardar";
-btnAction.style.background = "var(--accent-green)";
-btnAction.style.color = "#fff";
-btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
+    const docente = listaDocentesGlobal[index];
+    const contenedorFeedbacks = document.getElementById(`feedbacks-container-${index}`);
+    let htmlInputs = '';
+
+    docente.feedbacks.forEach((comentario, cIndex) => {
+        htmlInputs += `
+            <div class="feedback-bubble" style="padding: 10px;">
+                <input type="text" value="${comentario}" class="input-feedback-${index}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+        `;
+    });
+    
+    contenedorFeedbacks.innerHTML = htmlInputs;
+
+    const btnAction = document.getElementById(`btn-action-${index}`);
+    btnAction.innerText = "Guardar";
+    btnAction.style.background = "#00bfa5";
+    btnAction.style.color = "#fff";
+    btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
 }
+
 // 3. ENVÍA LOS CAMBIOS EDITADOS A TU TABLA DE SUPABASE
 async function guardarCambiosSupabase(index, docenteId) {
-const btnAction = document.getElementById(`btn-action-${index}`);
-btnAction.innerText = "Guardando...";
-btnAction.disabled = true;
-const inputs = document.querySelectorAll(`.input-feedback-${index}`);
-const nuevosFeedbacks = [];
-inputs.forEach(input => {
-if (input.value.trim() !== "") {
-nuevosFeedbacks.push(input.value.trim());
+    const btnAction = document.getElementById(`btn-action-${index}`);
+    btnAction.innerText = "Guardando...";
+    btnAction.disabled = true;
+
+    const inputs = document.querySelectorAll(`.input-feedback-${index}`);
+    const nuevosFeedbacks = [];
+    inputs.forEach(input => {
+        if (input.value.trim() !== "") {
+            nuevosFeedbacks.push(input.value.trim());
+        }
+    });
+
+    const { data, error } = await _supabase
+        .from('docentes')
+        .update({ feedbacks: nuevosFeedbacks })
+        .eq('id', docenteId)
+        .select();
+
+    if (error) {
+        alert("Error al actualizar: " + error.message);
+        btnAction.innerText = "Guardar";
+        btnAction.disabled = false;
+    } else {
+        alert("¡Comentarios actualizados correctamente en Supabase!");
+        await cargarFeedbacksDesdeSupabase(); 
+    }
 }
-});
-const { data, error } = await _supabase
-.from('docentes')
-.update({ feedbacks: nuevosFeedbacks })
-.eq('id', docenteId)
-.select();
-if (error) {
-alert("Error al actualizar: " + error.message);
-btnAction.innerText = "Guardar";
-btnAction.disabled = false;
-} else {
-alert("¡Comentarios actualizados correctamente en Supabase!");
-await cargarFeedbacksDesdeSupabase(); 
-}
-}
+
+// CORREGIDO: Llama primero a verificar la autenticación
 document.addEventListener('DOMContentLoaded', verificarAutenticacion);
-</script>
-</body>
-</html>
