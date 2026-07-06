@@ -245,6 +245,8 @@ async function cargarFeedbacksDesdeSupabase() {
             .from('docentes')
             .select('*')
             .order('id', { ascending: true });
+            // !!! AÑADE ESTA LÍNEA DE CONTROL AQUÍ:
+console.log("Datos recibidos de Supabase:", docentes);
 
         if (error) {
             console.error("Error cargando datos de Supabase:", error);
