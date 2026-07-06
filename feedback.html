@@ -200,128 +200,134 @@
         </div>
     </main>
 
-    <!-- CDN OFICIAL DE SUPABASE (CORREGIDA) -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- 1. CDN OFICIAL DE SUPABASE (CORREGIDA Y COMPLETA) -->
+<script src="https://jsdelivr.net"></script>
 
-    <script>
-        // CREDENCIALES OPTIMIZADAS (URL CORREGIDA SIN /REST/V1/)
-        const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
+<script>
+// CREDENCIALES OPTIMIZADAS
+const SUPABASE_URL = "https://supabase.co"; 
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
 
-        // Inicializar cliente de Supabase
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Inicializar cliente usando la librería oficial de Supabase
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Arreglo global temporal para almacenar lo que viene de la BD
-        let listaDocentesGlobal = [];
+// Arreglo global temporal para almacenar lo que viene de la BD
+let listaDocentesGlobal = [];
 
-        // 1. FUNCIÓN PARA CARGAR LOS DATOS DESDE SUPABASE
-        async function cargarFeedbacksDesdeSupabase() {
-            const { data: docentes, error } = await _supabase
-                .from('docentes')
-                .select('*')
-                .order('id', { ascending: true });
+// 1. FUNCIÓN PARA CARGAR LOS DATOS DESDE SUPABASE
+async function cargarFeedbacksDesdeSupabase() {
+    try {
+        const { data: docentes, error } = await _supabase
+            .from('docentes')
+            .select('*')
+            .order('id', { ascending: true });
 
-            if (error) {
-                console.error("Error cargando datos de Supabase:", error);
-                alert("No se pudieron cargar los datos de la base de datos.");
-                return;
+        if (error) {
+            console.error("Error cargando datos de Supabase:", error);
+            alert("No se pudieron cargar los datos de la base de datos: " + error.message);
+            return;
+        }
+
+        listaDocentesGlobal = docentes; 
+
+        const contenedor = document.getElementById('docentes-list');
+        contenedor.innerHTML = '';
+
+        if (!docentes || docentes.length === 0) {
+            contenedor.innerHTML = '<p style="text-align:center; color:#555;">No se encontraron docentes en la tabla.</p>';
+            return;
+        }
+
+        docentes.forEach((docente, index) => {
+            let htmlFeedbacks = '';
+            if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
+                docente.feedbacks.forEach((comentario, cIndex) => {
+                    htmlFeedbacks += `
+                        <div class="feedback-bubble">
+                            <span id="text-${index}-${cIndex}">${comentario}</span>
+                        </div>
+                    `;
+                });
             }
 
-            listaDocentesGlobal = docentes; // Guardamos en la variable global
-            const contenedor = document.getElementById('docentes-list');
-            contenedor.innerHTML = '';
-
-            docentes.forEach((docente, index) => {
-                let htmlFeedbacks = '';
-                
-                if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
-                    docente.feedbacks.forEach((comentario, cIndex) => {
-                        htmlFeedbacks += `
-                            <div class="feedback-bubble">
-                                <span id="text-${index}-${cIndex}">${comentario}</span>
-                            </div>
-                        `;
-                    });
-                }
-
-                const tarjeta = `
-                    <div class="teacher-card" id="card-${index}">
-                        <div class="profile-section">
-                            <div class="avatar-container">
-                                <img src="${docente.foto}" alt="" onerror="this.style.display='none';">
-                            </div>
-                            <h2>${docente.nombre}</h2>
-                            <p>${docente.facultad}</p>
-                            <!-- BOTÓN DE ACCIÓN EN LA TARJETA -->
-                            <button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>
+            const tarjeta = `
+                <div class="teacher-card" id="card-${index}">
+                    <div class="profile-section">
+                        <div class="avatar-container">
+                            <img src="${docente.foto}" alt="${docente.nombre}" onerror="this.src='https://placeholder.com';">
                         </div>
-                        <div class="feedbacks-section" id="feedbacks-container-${index}">
-                            ${htmlFeedbacks}
-                        </div>
+                        <h2>${docente.nombre}</h2>
+                        <p>${docente.facultad}</p>
+                        <button onclick="habilitarEdicion(${index}, ${docente.id})" class="btn-login" style="margin-top:15px; padding:8px 15px; cursor:pointer;" id="btn-action-${index}">Editar</button>
                     </div>
-                `;
-                contenedor.innerHTML += tarjeta;
-            });
-        }
-
-        // 2. ACTIVA LOS INPUTS EN LA TARJETA SELECCIONADA
-        function habilitarEdicion(index, docenteId) {
-            const docente = listaDocentesGlobal[index];
-            const contenedorFeedbacks = document.getElementById(`feedbacks-container-${index}`);
-            
-            let htmlInputs = '';
-            docente.feedbacks.forEach((comentario, cIndex) => {
-                htmlInputs += `
-                    <div class="feedback-bubble" style="padding: 10px;">
-                        <input type="text" value="${comentario}" class="input-feedback-${index}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                    <div class="feedbacks-section" id="feedbacks-container-${index}">
+                        ${htmlFeedbacks}
                     </div>
-                `;
-            });
+                </div>
+            `;
+            contenedor.innerHTML += tarjeta;
+        });
+    } catch (err) {
+        console.error("Error inesperado:", err);
+    }
+}
 
-            contenedorFeedbacks.innerHTML = htmlInputs;
+// 2. ACTIVA LOS INPUTS EN LA TARJETA SELECCIONADA
+function habilitarEdicion(index, docenteId) {
+    const docente = listaDocentesGlobal[index];
+    const contenedorFeedbacks = document.getElementById(`feedbacks-container-${index}`);
+    let htmlInputs = '';
 
-            // Cambiar comportamiento del botón a "Guardar"
-            const btnAction = document.getElementById(`btn-action-${index}`);
-            btnAction.innerText = "Guardar";
-            btnAction.style.background = "#00bfa5";
-            btnAction.style.color = "#fff";
-            btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
+    docente.feedbacks.forEach((comentario, cIndex) => {
+        htmlInputs += `
+            <div class="feedback-bubble" style="padding: 10px;">
+                <input type="text" value="${comentario}" class="input-feedback-${index}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+        `;
+    });
+    
+    contenedorFeedbacks.innerHTML = htmlInputs;
+
+    const btnAction = document.getElementById(`btn-action-${index}`);
+    btnAction.innerText = "Guardar";
+    btnAction.style.background = "#00bfa5";
+    btnAction.style.color = "#fff";
+    btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
+}
+
+// 3. ENVÍA LOS CAMBIOS EDITADOS A TU TABLA DE SUPABASE
+async function guardarCambiosSupabase(index, docenteId) {
+    const btnAction = document.getElementById(`btn-action-${index}`);
+    btnAction.innerText = "Guardando...";
+    btnAction.disabled = true;
+
+    const inputs = document.querySelectorAll(`.input-feedback-${index}`);
+    const nuevosFeedbacks = [];
+    inputs.forEach(input => {
+        if (input.value.trim() !== "") {
+            nuevosFeedbacks.push(input.value.trim());
         }
+    });
 
-        // 3. ENVÍA LOS CAMBIOS EDITADOS A TU TABLA DE SUPABASE
-        async function guardarCambiosSupabase(index, docenteId) {
-            const btnAction = document.getElementById(`btn-action-${index}`);
-            btnAction.innerText = "Guardando...";
-            btnAction.disabled = true;
+    const { data, error } = await _supabase
+        .from('docentes')
+        .update({ feedbacks: nuevosFeedbacks })
+        .eq('id', docenteId)
+        .select();
 
-            // Capturar todos los nuevos valores de los inputs correspondientes
-            const inputs = document.querySelectorAll(`.input-feedback-${index}`);
-            const nuevosFeedbacks = [];
-            inputs.forEach(input => {
-                if (input.value.trim() !== "") {
-                    nuevosFeedbacks.push(input.value.trim());
-                }
-            });
+    if (error) {
+        alert("Error al actualizar: " + error.message);
+        btnAction.innerText = "Guardar";
+        btnAction.disabled = false;
+    } else {
+        alert("¡Comentarios actualizados correctamente en Supabase!");
+        await cargarFeedbacksDesdeSupabase(); 
+    }
+}
 
-            // Petición UPDATE hacia tu servicio de Supabase
-            const { data, error } = await _supabase
-                .from('docentes')
-                .update({ feedbacks: nuevosFeedbacks })
-                .eq('id', docenteId)
-                .select(); // Se añade select() para verificar respuesta en algunas versiones
+// Ejecución automática al abrir la pantalla
+document.addEventListener('DOMContentLoaded', cargarFeedbacksDesdeSupabase);
+</script>
 
-            if (error) {
-                alert("Error al actualizar: " + error.message);
-                btnAction.innerText = "Guardar";
-                btnAction.disabled = false;
-            } else {
-                alert("¡Comentarios actualizados correctamente en Supabase!");
-                await cargarFeedbacksDesdeSupabase(); // Recarga la vista actualizada
-            }
-        }
-
-        // Ejecución automática al abrir la pantalla
-        document.addEventListener('DOMContentLoaded', cargarFeedbacksDesdeSupabase);
-    </script>
 </body>
 </html>
