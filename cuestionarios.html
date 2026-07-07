@@ -168,11 +168,77 @@
         </form>
     </main>
 
-    <script>
-        document.getElementById('evaluation-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('¡Muchas gracias! Tu evaluación ha sido enviada con éxito.');
+    <!-- Cargar el cliente personalizado que ya reparamos previamente -->
+<script src="supabase.js"></script>
+
+<script>
+// CREDENCIALES COMPARTIDAS
+const SUPABASE_URL = "https://supabase.co"; 
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
+
+// Inicializar base de datos
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+document.getElementById('evaluation-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Cambiar estado del botón para feedback visual
+    const boton = e.target.querySelector('button[type="submit"]');
+    const textoOriginal = boton.innerText;
+    boton.innerText = "Enviando...";
+    boton.disabled = true;
+
+    // Recopilar los valores marcados (Radio Buttons)
+    const respuestas = {
+        p1: parseInt(document.querySelector('input[name="q1"]:checked')?.value || 0),
+        p2: parseInt(document.querySelector('input[name="q2"]:checked')?.value || 0),
+        p3: parseInt(document.querySelector('input[name="q3"]:checked')?.value || 0),
+        p4: parseInt(document.querySelector('input[name="q4"]:checked')?.value || 0),
+        p5: parseInt(document.querySelector('input[name="q5"]:checked')?.value || 0),
+        p6: parseInt(document.querySelector('input[name="q6"]:checked')?.value || 0),
+        p7: parseInt(document.querySelector('input[name="q7"]:checked')?.value || 0)
+    };
+
+    // Validar que todas las preguntas hayan sido respondidas antes de enviar
+    if (Object.values(respuestas).includes(0)) {
+        alert("Por favor, responda todas las preguntas antes de enviar el cuestionario.");
+        boton.innerText = textoOriginal;
+        boton.disabled = false;
+        return;
+    }
+
+    try {
+        // Enviar la información usando el método personalizado de tu supabase.js
+        // Como tu supabase.js actual requiere llamar a .select() en cadenas personalizadas,
+        // nos aseguramos de estructurar la inserción nativa de datos:
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/respuestas_cuestionarios`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation'
+            },
+            body: JSON.stringify(respuestas)
         });
-    </script>
+
+        if (response.ok) {
+            alert('¡Muchas gracias! Tu evaluación ha sido registrada exitosamente en Supabase.');
+            document.getElementById('evaluation-form').reset(); // Limpiar el cuestionario
+        } else {
+            const errData = await response.json();
+            alert('Error al guardar datos: ' + (errData.message || 'Intente de nuevo.'));
+        }
+    } catch (error) {
+        console.error("Error de red:", error);
+        alert('Hubo un problema de conexión al enviar el cuestionario.');
+    } finally {
+        // Restaurar botón
+        boton.innerText = textoOriginal;
+        boton.disabled = false;
+    }
+});
+</script>
+
 </body>
 </html>
