@@ -265,7 +265,7 @@ async function cargarFeedbacksDesdeSupabase() {
             return;
         }
 
-                docentes.forEach((docente, index) => {
+        docentes.forEach((docente, index) => {
             let htmlFeedbacks = '';
             
             if (docente.feedbacks) {
@@ -301,8 +301,12 @@ async function cargarFeedbacksDesdeSupabase() {
             `;
             
             contenedor.innerHTML += tarjeta;
-        }); // <-- Aquí se cierra correctamente el docentes.forEach
+        }); 
 
+    } catch (err) {
+        console.error("Error inesperado en la carga:", err);
+    }
+} // <-- CORREGIDO: Aquí se cierra correctamente la función cargarFeedbacksDesdeSupabase
 
 // 2. ACTIVA LOS INPUTS EN LA TARJETA SELECCIONADA
 function habilitarEdicion(index, docenteId) {
@@ -310,30 +314,42 @@ function habilitarEdicion(index, docenteId) {
     const contenedorFeedbacks = document.getElementById(`feedbacks-container-${index}`);
     let htmlInputs = '';
 
-    docente.feedbacks.forEach((comentario, cIndex) => {
+    if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
+        docente.feedbacks.forEach((comentario, cIndex) => {
+            htmlInputs += `
+                <div class="feedback-bubble" style="padding: 10px 10px 10px 35px;">
+                    <input type="text" value="${comentario}" class="input-feedback-${index}" 
+                    style="width: 100%; padding: 8px; border: 1px solid #00bfa5; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; font-style: italic; color: #555; font-family: inherit;">
+                </div>
+            `;
+        });
+    } else if (docente.feedbacks) {
         htmlInputs += `
             <div class="feedback-bubble" style="padding: 10px 10px 10px 35px;">
-                <input type="text" value="${comentario}" class="input-feedback-${index}" 
+                <input type="text" value="${docente.feedbacks}" class="input-feedback-${index}" 
                 style="width: 100%; padding: 8px; border: 1px solid #00bfa5; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; font-style: italic; color: #555; font-family: inherit;">
             </div>
         `;
-    });
+    }
     
     contenedorFeedbacks.innerHTML = htmlInputs;
 
     const btnAction = document.getElementById(`btn-action-${index}`);
-    btnAction.innerText = "Guardar";
-    btnAction.style.background = "#00bfa5";
-    btnAction.style.color = "#fff";
-    btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
+    if (btnAction) {
+        btnAction.innerText = "Guardar";
+        btnAction.style.background = "#00bfa5";
+        btnAction.style.color = "#fff";
+        btnAction.setAttribute("onclick", `guardarCambiosSupabase(${index}, ${docenteId})`);
+    }
 }
-
 
 // 3. ENVÍA LOS CAMBIOS EDITADOS A TU TABLA DE SUPABASE
 async function guardarCambiosSupabase(index, docenteId) {
     const btnAction = document.getElementById(`btn-action-${index}`);
-    btnAction.innerText = "Guardando...";
-    btnAction.disabled = true;
+    if (btnAction) {
+        btnAction.innerText = "Guardando...";
+        btnAction.disabled = true;
+    }
 
     const inputs = document.querySelectorAll(`.input-feedback-${index}`);
     const nuevosFeedbacks = [];
@@ -351,14 +367,16 @@ async function guardarCambiosSupabase(index, docenteId) {
 
     if (error) {
         alert("Error al actualizar: " + error.message);
-        btnAction.innerText = "Guardar";
-        btnAction.disabled = false;
+        if (btnAction) {
+            btnAction.innerText = "Guardar";
+            btnAction.disabled = false;
+        }
     } else {
         alert("¡Comentarios actualizados correctamente en Supabase!");
         await cargarFeedbacksDesdeSupabase(); 
     }
 }
-
-// CORREGIDO: Llama primero a verificar la autenticación
+    
+// Iniciar la verificación de sesión y carga al montar el DOM
 document.addEventListener('DOMContentLoaded', verificarAutenticacion);
-verificarAutenticacion();
+</script>
