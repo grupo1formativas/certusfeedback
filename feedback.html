@@ -265,15 +265,19 @@ async function cargarFeedbacksDesdeSupabase() {
             return;
         }
 
-        docentes.forEach((docente, index) => {
+                docentes.forEach((docente, index) => {
             let htmlFeedbacks = '';
-            if (docente.feedbacks && Array.isArray(docente.feedbacks)) {
-                docente.feedbacks.forEach((comentario, cIndex) => {
-                            docente.feedbacks.forEach((comentario, cIndex) => {
-            htmlFeedbacks += `<div class="feedback-bubble"><span id="text-${index}-${cIndex}">${comentario}</span></div>`;
-        });
-
-                });
+            
+            if (docente.feedbacks) {
+                // Si es un array real (text[] o jsonb)
+                if (Array.isArray(docente.feedbacks)) {
+                    docente.feedbacks.forEach((comentario, cIndex) => {
+                        htmlFeedbacks += `<div class="feedback-bubble"><span id="text-${index}-${cIndex}">${comentario}</span></div>`;
+                    });
+                } else {
+                    // Por si acaso en la base de datos lo guardaste como un solo texto simple
+                    htmlFeedbacks += `<div class="feedback-bubble"><span id="text-${index}-0">${docente.feedbacks}</span></div>`;
+                }
             }
 
             const botonEditar = esUsuarioAutorizado 
@@ -281,26 +285,24 @@ async function cargarFeedbacksDesdeSupabase() {
                 : '';
 
             const tarjeta = `
-                <div class="teacher-card" id="card-${index}">
-                    <div class="profile-section">
-                        <div class="avatar-container">
-                            <img src="${docente.foto}" alt="${docente.nombre}" onerror="this.src='https://placeholder.com';">
-                        </div>
-                        <h2>${docente.nombre}</h2>
-                        <p>${docente.facultad}</p>
-                        ${botonEditar}
+            <div class="teacher-card" id="card-${index}">
+                <div class="profile-section">
+                    <div class="avatar-container">
+                        <img src="${docente.foto}" alt="${docente.nombre}" onerror="this.src='https://placeholder.com';">
                     </div>
-                    <div class="feedbacks-section" id="feedbacks-container-${index}">
-                        ${htmlFeedbacks}
-                    </div>
+                    <h2>${docente.nombre}</h2>
+                    <p>${docente.facultad}</p>
+                    ${botonEditar}
                 </div>
+                <div class="feedbacks-section" id="feedbacks-container-${index}">
+                    ${htmlFeedbacks}
+                </div>
+            </div>
             `;
+            
             contenedor.innerHTML += tarjeta;
-        });
-    } catch (err) {
-        console.error("Error inesperado:", err);
-    }
-}
+        }); // <-- Aquí se cierra correctamente el docentes.forEach
+
 
 // 2. ACTIVA LOS INPUTS EN LA TARJETA SELECCIONADA
 function habilitarEdicion(index, docenteId) {
