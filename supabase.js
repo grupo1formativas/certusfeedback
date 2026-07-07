@@ -42,49 +42,49 @@
                     return { error: null };
                 }
             },
-           from: function (tableName) {
-    return {
-        select: function () {
-            return {
-                order: function (column, { ascending }) {
-                    // Retornamos una Promesa nativa real
-                    return new Promise(async (resolve, reject) => {
-                        try {
-                            const response = await fetch(`${restUrl}/${tableName}?select=*&order=${column}.${ascending ? 'asc' : 'desc'}`, { method: 'GET', headers: headers });
-                            const data = await response.json();
-                            resolve({ data, error: response.ok ? null : data });
-                        } catch (err) { 
-                            resolve({ data: null, error: err }); 
-                        }
-                    });
-                }
-            };
-        },
-        update: function (values) {
-            return {
-                eq: function (column, value) {
-                    return {
-                        select: function () {
-                            return new Promise(async (resolve, reject) => {
-                                try {
-                                    const response = await fetch(`${restUrl}/${tableName}?${column}=eq.${value}`, {
-                                        method: 'PATCH',
-                                        headers: headers,
-                                        body: JSON.stringify(values)
-                                    });
-                                    const data = await response.json();
-                                    resolve({ data, error: response.ok ? null : data });
-                                } catch (err) { 
-                                    resolve({ data: null, error: err }); 
-                                }
-                            });
-                        }
-                    };
-                }
-            };
-        }
+            from: function (tableName) {
+                return {
+                    select: function () {
+                        return {
+                            order: function (column, { ascending }) {
+                                return new Promise(async (resolve) => {
+                                    try {
+                                        const response = await fetch(`${restUrl}/${tableName}?select=*&order=${column}.${ascending ? 'asc' : 'desc'}`, { method: 'GET', headers: headers });
+                                        const data = await response.json();
+                                        resolve({ data, error: response.ok ? null : data });
+                                    } catch (err) { 
+                                        resolve({ data: null, error: err }); 
+                                    }
+                                });
+                            }
+                        };
+                    },
+                    update: function (values) {
+                        return {
+                            eq: function (column, value) {
+                                return {
+                                    select: function () {
+                                        return new Promise(async (resolve) => {
+                                            try {
+                                                const response = await fetch(`${restUrl}/${tableName}?${column}=eq.${value}`, {
+                                                    method: 'PATCH',
+                                                    headers: headers,
+                                                    body: JSON.stringify(values)
+                                                });
+                                                const data = await response.json();
+                                                resolve({ data, error: response.ok ? null : data });
+                                            } catch (err) { 
+                                                resolve({ data: null, error: err }); 
+                                            }
+                                        });
+                                    }
+                                };
+                            }
+                        };
+                    }
+                };
+            }
+        };
     };
-}
-
     Object.defineProperty(exports, '__esModule', { value: true });
 }));
