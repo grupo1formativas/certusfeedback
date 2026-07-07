@@ -52,9 +52,7 @@
                                         const response = await fetch(`${restUrl}/${tableName}?select=*&order=${column}.${ascending ? 'asc' : 'desc'}`, { method: 'GET', headers: headers });
                                         const data = await response.json();
                                         resolve({ data, error: response.ok ? null : data });
-                                    } catch (err) { 
-                                        resolve({ data: null, error: err }); 
-                                    }
+                                    } catch (err) { resolve({ data: null, error: err }); }
                                 });
                             }
                         };
@@ -73,18 +71,37 @@
                                                 });
                                                 const data = await response.json();
                                                 resolve({ data, error: response.ok ? null : data });
-                                            } catch (err) { 
-                                                resolve({ data: null, error: err }); 
-                                            }
+                                            } catch (err) { resolve({ data: null, error: err }); }
                                         });
                                     }
                                 };
                             }
                         };
+                    },
+                    insert: function (values) {
+                        return {
+                            select: function () {
+                                return new Promise(async (resolve) => {
+                                    try {
+                                        const response = await fetch(`${restUrl}/${tableName}`, {
+                                            method: 'POST',
+                                            headers: headers,
+                                            body: JSON.stringify(values)
+                                        });
+                                        let data = null;
+                                        if (response.status !== 204) {
+                                            data = await response.json();
+                                        }
+                                        resolve({ data, error: response.ok ? null : { message: "Error al insertar" } });
+                                    } catch (err) { resolve({ data: null, error: err }); }
+                                });
+                            }
+                        };
                     }
                 };
             }
-        };
-    };
+        }; // <-- CORREGIDO: Cierre del objeto que retorna createClient
+    }; // <-- CORREGIDO: Cierre de la función createClient
     Object.defineProperty(exports, '__esModule', { value: true });
 }));
+
