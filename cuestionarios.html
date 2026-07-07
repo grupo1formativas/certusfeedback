@@ -171,10 +171,9 @@
     <!-- Cargar el cliente personalizado que ya reparamos previamente -->
 <script src="supabase.js"></script>
 <script>
+// CREDENCIALES COMPARTIDAS
 const SUPABASE_URL = "https://sveuioftgpieyfpxktgl.supabase.co"; 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2ZXVpb2Z0Z3BpZXlmcHhrdGdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTY0MTQsImV4cCI6MjA5ODc5MjQxNH0.0vif1E9K403EoKCMdHbPOsQXtkigutEohQMAgkdt5ac";
-
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.getElementById('evaluation-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -184,6 +183,7 @@ document.getElementById('evaluation-form').addEventListener('submit', async func
     boton.innerText = "Enviando...";
     boton.disabled = true;
 
+    // Recopilar los valores de los Radio Buttons
     const respuestas = {
         p1: parseInt(document.querySelector('input[name="q1"]:checked')?.value || 0),
         p2: parseInt(document.querySelector('input[name="q2"]:checked')?.value || 0),
@@ -194,6 +194,7 @@ document.getElementById('evaluation-form').addEventListener('submit', async func
         p7: parseInt(document.querySelector('input[name="q7"]:checked')?.value || 0)
     };
 
+    // Validar que todas las preguntas hayan sido contestadas
     if (Object.values(respuestas).includes(0)) {
         alert("Por favor, responda todas las preguntas antes de enviar el cuestionario.");
         boton.innerText = textoOriginal;
@@ -202,18 +203,29 @@ document.getElementById('evaluation-form').addEventListener('submit', async func
     }
 
     try {
-        // Usamos el cliente nativo con el método insert recién agregado
-        const { data, error } = await _supabase
-            .from('respuestas_cuestionarios')
-            .insert(respuestas)
-            .select();
+        // Petición nativa directa con todas las cabeceras requeridas por PostgREST
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/respuestas_cuestionarios`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal' // Indica a Supabase que inserte silenciosamente sin pedir respuesta pesada
+            },
+            body: JSON.stringify(respuestas)
+        });
 
-        if (error) {
-            alert('Error al guardar datos en la base de datos.');
-            console.error(error);
-        } else {
+        if (response.ok) {
             alert('¡Muchas gracias! Tu evaluación ha sido registrada exitosamente en Supabase.');
             document.getElementById('evaluation-form').reset();
+        } else {
+            // Si la base de datos responde un error, intentamos leer el mensaje JSON
+            try {
+                const errData = await response.json();
+                alert('Error en la base de datos: ' + (errData.message || 'Verifique la configuración.'));
+            } catch(jsonErr) {
+                alert('Error al guardar datos (Código de estado HTTP: ' + response.status + ')');
+            }
         }
     } catch (error) {
         console.error("Error de red:", error);
