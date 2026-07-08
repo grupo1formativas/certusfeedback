@@ -78,6 +78,18 @@
         <h1 class="survey-title">Cuestionario de Evaluación Docente</h1>
         
         <form id="evaluation-form">
+<!-- INICIO: BLOQUE DE SELECCIÓN DE DOCENTE -->
+<div class="question-block" style="margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+    <label for="docente" style="font-size: 1.1rem; font-weight: bold; color: #333; display: block; margin-bottom: 10px;">
+        Selecciona al docente a evaluar:
+    </label>
+    <select id="docente" required style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">
+        <option value="">-- Elige un profesor --</option>
+        <option value="Carlos Mendoza">Carlos Mendoza</option>
+        <option value="Ana Rivas">Ana Rivas</option>
+    </select>
+</div>
+
             <!-- Pregunta 1 -->
             <div class="question-block">
                 <p class="question-text">1. El docente explicó los temas con claridad.</p>
@@ -185,6 +197,7 @@ document.getElementById('evaluation-form').addEventListener('submit', async func
 
     // Recopilar los valores de los Radio Buttons
     const respuestas = {
+        docente_nombre: document.getElementById('docente').value,
         p1: parseInt(document.querySelector('input[name="q1"]:checked')?.value || 0),
         p2: parseInt(document.querySelector('input[name="q2"]:checked')?.value || 0),
         p3: parseInt(document.querySelector('input[name="q3"]:checked')?.value || 0),
@@ -201,7 +214,24 @@ document.getElementById('evaluation-form').addEventListener('submit', async func
         boton.disabled = false;
         return;
     }
+    // Validar que todas las preguntas hayan sido contestadas
+if (!respuestas.docente_nombre) {
+    alert("Por favor, seleccione un docente antes de enviar.");
+    boton.innerText = textoOriginal;
+    boton.disabled = false;
+    return;
+}
 
+// Clonamos el objeto sin el nombre para que la validación de ceros funcione bien
+const soloNumeros = { ...respuestas };
+delete soloNumeros.docente_nombre;
+
+if (Object.values(soloNumeros).includes(0)) {
+    alert("Por favor, responda todas las preguntas antes de enviar el cuestionario.");
+    boton.innerText = textoOriginal;
+    boton.disabled = false;
+    return;
+}
     try {
         // Petición nativa directa con todas las cabeceras requeridas por PostgREST
         const response = await fetch(`${SUPABASE_URL}/rest/v1/respuestas_cuestionarios`, {
